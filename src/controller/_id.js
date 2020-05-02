@@ -6,7 +6,11 @@ module.exports = class Test2 extends BaseController {
   }
 
   putScoueTextAction () {
-
+    return {
+      msg: 'hello world',
+      params: this.params.id,
+      query: this.query
+    }
   }
 
   getAction () {
