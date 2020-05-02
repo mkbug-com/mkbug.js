@@ -1,0 +1,36 @@
+{
+  "name": "mkbugjs",
+  "version": "1.0.0",
+  "description": "The OOP style framework for expressjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkbug-com/mkbug.js.git"
+  },
+  "files": [
+    "index.js",
+    "package.json",
+    "LICENSE",
+    "README.md",
+    "bin"
+  ],
+  "keywords": [
+    "Nodejs",
+    "OOP",
+    "expressjs",
+    "restfull",
+    "js"
+  ],
+  "author": "ryouaki (46517115@qq.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mkbug-com/mkbug.js/issues"
+  },
+  "homepage": "https://github.com/mkbug-com/mkbug.js#readme",
+  "peerDependencies": {
+    "express": "4.17.1"
+  }
+}
