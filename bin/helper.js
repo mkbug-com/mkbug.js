@@ -10,13 +10,40 @@ function doParse (modules) {
     ...others
   } = modules;
 
-  const routers = parseController(Controller);
+  const router = express.Router();
 
-  return routers;
+  parseController(router, path.resolve(baseDir, Controller));
+
+  return router;
 }
 
-function parseController (path) {
+function parseController (router, dir, pre = '/') {
+  try {
+    const files = fs.readdirSync(dir);
+    files.forEach(function createController (file) {
+      const stat = fs.lstatSync(`${dir}/${file}`);
+      let subPath = `${pre}`;
+      let needParams = false;
 
+      if (file.startsWith('_')) {
+        subPath += `${file}/`;
+        subPath = subPath.replace('_', ':');
+        needParams = true;
+      }
+      
+      if (stat.isFile()) {
+        subPath = subPath.replace('.js', '');
+        const Controller = require(`${dir}/${file}`);
+        if (typeof Controller === 'function' && Controller.constructor) {
+          router.attch(subPath, new Controller(), needParams);
+        }
+      } else if (stat.isDirectory()) {
+        parseController(router, path.resolve(dir, file), subPath);
+      }
+    });
+  } catch (e) {
+    console.error('Mkbug.js[ERROR]:', e);
+  }
 }
 
 exports.createModule = function (path) {
@@ -36,7 +63,7 @@ exports.createModule = function (path) {
       }
     });
 
-    router.attch(doParse(modules));
+    router.use(doParse(modules));
   } catch (e) {
     console.error('Mkbug.js[ERROR]:',e)
   }
