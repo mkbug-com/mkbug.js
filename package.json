@@ -4,7 +4,7 @@
   "description": "The OOP style framework for expressjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "init": "npm i express chalk"
   },
   "repository": {
     "type": "git",
