@@ -1,5 +1,6 @@
 const express = require('express');
 const Stream = require('stream');
+const chalk = require('chalk');
 
 const { createModule } = require('./bin/helper');
 const { METHODS } = require('./bin/const');
@@ -10,7 +11,6 @@ const router = express.Router();
 
 function getMethod (method) {
   const re = new RegExp(/^(get|post|delete|put|update|options|patch|head)(.*)(Action$)/);
-  // return method.match(reg);
   return re[Symbol.match](method)
 }
 
@@ -30,7 +30,7 @@ router.__proto__.attch = function (pre, controller, needParams) {
       } else {
         uri = `${pre}${name.toLowerCase()}/${methodName}`
       }
-      console.info('Mkbug.js[INFO]:', uri);
+      console.info(chalk.yellow('Mkbug.js[INFO]:'), uri);
 
       _this[actions[1]](`${uri}`, async function (req, res, next) {
         const ctx = {};
@@ -77,8 +77,12 @@ router.__proto__.attch = function (pre, controller, needParams) {
 }
 
 exports.router = function (opts = {}) {
+  console.info(chalk.bgGreen('Mkbug.js[INFO]:'), chalk.yellow('Welcome to Mkbug.js'));
   const basePath = opts.path || path.resolve(process.cwd(), 'controller');
+
+  console.info(chalk.bgYellow('==========Mkbug router mapping start=========='));
   const router = createModule(basePath);
+  console.info(chalk.bgYellow('==========Mkbug router mapping end============'));
 
   return router;
 }

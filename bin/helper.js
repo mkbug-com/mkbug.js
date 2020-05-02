@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require('path');
 const fs = require('fs');
+const chalk = require('chalk');
 
 let baseDir = '';
 
@@ -42,7 +43,7 @@ function parseController (router, dir, pre = '/') {
       }
     });
   } catch (e) {
-    console.error('Mkbug.js[ERROR]:', e);
+    console.error(chalk.red('Mkbug.js[ERROR]:', e));
   }
 }
 
@@ -65,7 +66,7 @@ exports.createModule = function (path) {
 
     router.use(doParse(modules));
   } catch (e) {
-    console.error('Mkbug.js[ERROR]:',e)
+    console.error(chalk.red('Mkbug.js[ERROR]:', e));
   }
 
   return router;

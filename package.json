@@ -31,6 +31,11 @@
   },
   "homepage": "https://github.com/mkbug-com/mkbug.js#readme",
   "peerDependencies": {
+    "express": "^4.1.1",
+    "chalk": "^4.0.0"
+  },
+  "dependencies": {
+    "chalk": "4.0.0",
     "express": "4.17.1"
   }
 }
