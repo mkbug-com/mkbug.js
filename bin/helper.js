@@ -51,7 +51,7 @@ function parseController (router, dir, { pre = '/', logics = {} }) {
             router.attch(subPath, control, needParams);
           } else {
             console.warn(chalk.magenta('Mkbug.js[WARN]:'),
-              chalk.bgMagenta(`Controller ${file} must extends from BaseController or will be ignored!`));
+              chalk.bgMagenta(`Controller ${file} must extends from BaseController and will be ignored!`));
           }
         }
       } else if (stat.isDirectory()) {
@@ -63,7 +63,7 @@ function parseController (router, dir, { pre = '/', logics = {} }) {
   }
 }
 
-function parseLogic (dir) {
+function parseLogic (dir, parent = '') {
   let logics = {};
 
   try {
@@ -75,17 +75,30 @@ function parseLogic (dir) {
         if (typeof Logic === 'function' && Logic.constructor) {
           const logic = new Logic();
           if (logic instanceof BaseLogic) {
-            logics[logic.__$$getName()] = logic;
+            console.info(chalk.yellow('Mkbug.js[INFO]:'), 
+              `Inject Logic ${parent !== '' ? parent + '.' : parent}${logic.__$$getName()}`);
+            if (logics[logic.__$$getName()]) {
+              logics[logic.__$$getName()].__proto__ = logic;
+            } else {
+              logics[logic.__$$getName()] = logic;
+            }
           } else {
             console.warn(chalk.magenta('Mkbug.js[WARN]:'),
-              chalk.bgMagenta(`Logic ${file} must extends from BaseLogic or will be ignored!`));
+              chalk.bgMagenta(`Logic ${file} must extends from BaseLogic and will be ignored!`));
           }
         }
       } else if (stat.isDirectory()) {
-        if (!logics.modules) {
-          logics.modules = {};
+        if (logics[file]) {
+          console.warn(chalk.magenta('Mkbug.js[WARN]:'),
+              chalk.bgMagenta(`Logic ${file} is existed, the same properties will be overrode!`));
         }
-        logics.modules[file] = parseLogic(path.resolve(dir, file));
+        const subLogics = parseLogic(path.resolve(dir, file), `${parent !== '' ? (parent + '.' + file) : file}`) || {};
+        if (!logics[file]) {
+          logics[file] = {}
+        }
+        Object.keys(subLogics).forEach(function injectSubLogic (sub) {
+          logics[file][sub] = subLogics[sub];
+        })
       }
     });
   } catch (e) {
