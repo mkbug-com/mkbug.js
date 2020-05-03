@@ -1,6 +1,17 @@
+const { _get } = require('./utils');
+
 module.exports = class BaseController {
-  constructor() {
-    this.name = this.constructor.name;
+  constructor(logics) {
+    this.__$$name = this.constructor.name;
+    this.__$$logics = logics;
+  }
+
+  get Logics () {
+    return this.__$$logics;
+  }
+
+  getLogic (path, def = null) {
+    return _get(this.Logics, path, def);
   }
 
   before () {
@@ -12,7 +23,7 @@ module.exports = class BaseController {
   }
 
   __$$getName () {
-    return this.name;
+    return this.__$$name;
   }
 
   __$$getMethods () {

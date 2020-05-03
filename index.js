@@ -6,6 +6,7 @@ const { createModule } = require('./bin/helper');
 const { METHODS } = require('./bin/const');
 const { isPromise } = require('./bin/utils');
 const BaseController = require('./bin/base.controller');
+const BaseLogic = require('./bin/base.logic');
 
 const router = express.Router();
 
@@ -34,6 +35,7 @@ router.__proto__.attch = function (pre, controller, needParams) {
 
       _this[actions[1]](`${uri}`, async function (req, res, next) {
         const ctx = {};
+        ctx.__proto__ = controller.__proto__;
         ctx.req = req;
         ctx.res = res;
         ctx.query = req.query;
@@ -42,16 +44,26 @@ router.__proto__.attch = function (pre, controller, needParams) {
         ctx.status = 200;
         ctx.type = null;
 
+        for (let key in controller) {
+          ctx[key] = controller[key];
+        }
+        
         let data = null;
 
         const before = controller.before.call(ctx, req, res, next);
+        let beforeRet = null;
+        if (isPromise(before)) {
+          beforeRet = await before;
+        } else {
+          beforeRet = before
+        }
 
-        if (before === true) {
+        if (beforeRet === true) {
           data = controller[method].call(ctx, req, res, next);
         }
         const after = controller.after.call(ctx, req, res, next);
 
-        if (before === true) {
+        if (beforeRet === true) {
           let result = null;
           if (isPromise(data)) {
             result = await data;
@@ -78,13 +90,11 @@ router.__proto__.attch = function (pre, controller, needParams) {
 
 exports.router = function (opts = {}) {
   console.info(chalk.bgGreen('Mkbug.js[INFO]:'), chalk.yellow('Welcome to Mkbug.js'));
-  const basePath = opts.path || path.resolve(process.cwd(), 'controller');
-
-  console.info(chalk.bgYellow('==========Mkbug router mapping start=========='));
+  const basePath = opts.path || path.resolve(process.cwd(), 'controller');  
   const router = createModule(basePath);
-  console.info(chalk.bgYellow('==========Mkbug router mapping end============'));
 
   return router;
 }
 
 exports.BaseController = BaseController;
+exports.BaseLogic = BaseLogic;

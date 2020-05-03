@@ -3,22 +3,32 @@ const path = require('path');
 const fs = require('fs');
 const chalk = require('chalk');
 
+const BaseController = require('./base.controller');
+const BaseLogic = require('./base.logic');
+
 let baseDir = '';
 
 function doParse (modules) {
   const {
     Controller = '',
+    Logic = '',
     ...others
   } = modules;
 
   const router = express.Router();
 
-  parseController(router, path.resolve(baseDir, Controller));
+  console.info(chalk.bgYellow('==========Mkbug logic mapping start=========='));
+  const logics = parseLogic(path.resolve(baseDir, Logic));
+  console.info(chalk.bgYellow('==========Mkbug logic mapping end============'));
+
+  console.info(chalk.bgYellow('==========Mkbug router mapping start=========='));
+  parseController(router, path.resolve(baseDir, Controller), { logics });
+  console.info(chalk.bgYellow('==========Mkbug router mapping end============'));
 
   return router;
 }
 
-function parseController (router, dir, pre = '/') {
+function parseController (router, dir, { pre = '/', logics = {} }) {
   try {
     const files = fs.readdirSync(dir);
     files.forEach(function createController (file) {
@@ -36,7 +46,13 @@ function parseController (router, dir, pre = '/') {
         subPath = subPath.replace('.js', '');
         const Controller = require(`${dir}/${file}`);
         if (typeof Controller === 'function' && Controller.constructor) {
-          router.attch(subPath, new Controller(), needParams);
+          const control = new Controller(logics);
+          if (control instanceof BaseController) {
+            router.attch(subPath, control, needParams);
+          } else {
+            console.warn(chalk.magenta('Mkbug.js[WARN]:'),
+              chalk.bgMagenta(`Controller ${file} must extends from BaseController or will be ignored!`));
+          }
         }
       } else if (stat.isDirectory()) {
         parseController(router, path.resolve(dir, file), subPath);
@@ -45,6 +61,38 @@ function parseController (router, dir, pre = '/') {
   } catch (e) {
     console.error(chalk.red('Mkbug.js[ERROR]:', e));
   }
+}
+
+function parseLogic (dir) {
+  let logics = {};
+
+  try {
+    const files = fs.readdirSync(dir);
+    files.forEach(function createLogic (file) {
+      const stat = fs.lstatSync(`${dir}/${file}`);
+      if (stat.isFile()) {
+        const Logic = require(`${dir}/${file}`);
+        if (typeof Logic === 'function' && Logic.constructor) {
+          const logic = new Logic();
+          if (logic instanceof BaseLogic) {
+            logics[logic.__$$getName()] = logic;
+          } else {
+            console.warn(chalk.magenta('Mkbug.js[WARN]:'),
+              chalk.bgMagenta(`Logic ${file} must extends from BaseLogic or will be ignored!`));
+          }
+        }
+      } else if (stat.isDirectory()) {
+        if (!logics.modules) {
+          logics.modules = {};
+        }
+        logics.modules[file] = parseLogic(path.resolve(dir, file));
+      }
+    });
+  } catch (e) {
+    console.error(chalk.red('Mkbug.js[ERROR]:', e));
+  }
+
+  return logics;
 }
 
 exports.createModule = function (path) {
