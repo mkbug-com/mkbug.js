@@ -17,13 +17,13 @@ function doParse (modules) {
 
   const router = express.Router();
 
-  console.info(chalk.bgYellow('==========Mkbug logic mapping start=========='));
+  console.info(chalk.yellow('==========Mkbug logic inject start==========='));
   const logics = parseLogic(path.resolve(baseDir, Logic));
-  console.info(chalk.bgYellow('==========Mkbug logic mapping end============'));
-
-  console.info(chalk.bgYellow('==========Mkbug router mapping start=========='));
+  console.info(chalk.yellow('==========Mkbug logic inject end============='));
+  console.log('');
+  console.info(chalk.yellow('==========Mkbug router mapping start=========='));
   parseController(router, path.resolve(baseDir, Controller), { logics });
-  console.info(chalk.bgYellow('==========Mkbug router mapping end============'));
+  console.info(chalk.yellow('==========Mkbug router mapping end============'));
 
   return router;
 }
