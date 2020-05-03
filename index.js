@@ -8,12 +8,9 @@ const { isPromise } = require('./bin/utils');
 const BaseController = require('./bin/base.controller');
 const BaseLogic = require('./bin/base.logic');
 
-const router = express.Router();
+const { getMethod } = require('./bin/utils');
 
-function getMethod (method) {
-  const re = new RegExp(/^(get|post|delete|put|update|options|patch|head)(.*)(Action$)/);
-  return re[Symbol.match](method)
-}
+const router = express.Router();
 
 router.__proto__.attch = function (pre, controller, needParams) {
   const name = controller.__$$getName();

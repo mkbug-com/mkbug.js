@@ -15,10 +15,14 @@ function str2path (path) {
 }
 
 module.exports = {
-  isPromise: function (obj) {
+  isPromise (obj) {
     return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
   },
-  _get: function (obj, path, def) {
+  getMethod (method) {
+    const re = new RegExp(/^(get|post|delete|put|update|options|patch|head)(.*)(Action$)/);
+    return re[Symbol.match](method)
+  },
+  _get (obj, path, def) {
     const basePath = str2path(path);
 
     return basePath.reduce((ret, next) => {
