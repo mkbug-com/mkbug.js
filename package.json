@@ -1,5 +1,5 @@
 {
-  "name": "mkbugjs",
+  "name": "@mkbug/mkbugjs",
   "version": "1.0.0",
   "description": "The OOP style framework for expressjs",
   "main": "index.js",
@@ -33,9 +33,5 @@
   "peerDependencies": {
     "express": "^4.1.1",
     "chalk": "^4.0.0"
-  },
-  "dependencies": {
-    "chalk": "4.0.0",
-    "express": "4.17.1"
   }
 }
