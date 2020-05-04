@@ -1,6 +1,7 @@
 const express = require('express');
 const Stream = require('stream');
 const chalk = require('chalk');
+const path = require('path');
 
 const { createModule } = require('./bin/helper');
 const { METHODS } = require('./bin/const');
@@ -89,10 +90,33 @@ router.__proto__.attch = function (pre, controller, needParams) {
 exports.mkbug = function (opts = {}) {
   console.info(chalk.bgGreen('Mkbug.js[INFO]:'), chalk.yellow('Welcome to Mkbug.js'));
   console.log('');
-  const basePath = opts.path || path.resolve(process.cwd(), 'controller');  
+  const basePath = opts.path || path.resolve(process.cwd(), 'src');
   const mkbug = createModule(basePath);
 
   return mkbug;
+}
+
+exports.Mkbug = class Mkbug {
+  constructor (app, opts = {}) {
+    console.info(chalk.bgGreen('Mkbug.js[INFO]:'), chalk.yellow('Welcome to Mkbug.js\n'));
+
+    this.app = app;
+    this.basePath = opts.path || path.resolve(process.cwd(), 'src');
+  }
+
+  create (prefix = '') {
+    this.app.use(prefix, createModule(this.basePath));
+    return this;
+  }
+
+  use (middleWare) {
+    this.app.use(middleWare);
+    return this;
+  }
+
+  start (port, cb) {
+    this.app.listen(port, cb);
+  }
 }
 
 exports.BaseController = BaseController;
