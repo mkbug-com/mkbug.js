@@ -32,7 +32,9 @@ module.exports = class BaseConfig {
     const _this = this;
     lineArr.forEach(function transFunc (line) {
       const keyValue = line.split('=');
-      _this.values[keyValue[0]] = keyValue[1];
+      if (keyValue[1] && keyValue[1] !== '') {
+        _this.values[keyValue[0]] = keyValue[1];
+      }
     });
   }
 }

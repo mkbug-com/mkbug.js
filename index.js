@@ -75,11 +75,17 @@ router.__proto__.attch = function (pre, controller, needParams) {
             res.status(ctx.status);
             if (Buffer.isBuffer(result) || typeof result === 'string') {
               res.end(result);
-            } else if (result instanceof String) {
+            } else if (result instanceof Stream) {
               result.pipe(res);
             } else {
               res.json(result);
             }
+          }
+        } else {
+          if (!res.finished) {
+            ctx.type && res.type(ctx.type);
+            res.status(405);
+            res.end('Method not allowed');
           }
         }
       })
