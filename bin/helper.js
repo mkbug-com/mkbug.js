@@ -13,23 +13,20 @@ function doParse (modules) {
   const {
     Controller = '',
     Logic = '',
-    Model = '',
-    ...others
+    Model = ''
   } = modules;
 
   const router = express.Router();
 
   console.info(chalk.yellow('==========Mkbug model inject start==========='));
   const models = parseModel(path.resolve(baseDir, Model));
-  console.info(chalk.yellow('==========Mkbug model inject end============='));
-  console.log('');
+  console.info(chalk.yellow('==========Mkbug model inject end=============\n'));
   console.info(chalk.yellow('==========Mkbug logic inject start==========='));
   const logics = parseLogic(path.resolve(baseDir, Logic), '', { models });
-  console.info(chalk.yellow('==========Mkbug logic inject end============='));
-  console.log('');
-  console.info(chalk.yellow('==========Mkbug router mapping start=========='));
+  console.info(chalk.yellow('==========Mkbug logic inject end=============\n'));
+  console.info(chalk.yellow('==========Mkbug controller mapping start=========='));
   parseController(router, path.resolve(baseDir, Controller), { logics });
-  console.info(chalk.yellow('==========Mkbug router mapping end============'));
+  console.info(chalk.yellow('==========Mkbug controller mapping end============'));
 
   return router;
 }

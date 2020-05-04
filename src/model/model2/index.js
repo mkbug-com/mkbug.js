@@ -1,4 +1,4 @@
-const { BaseModel } = require('./../../../index');
+const { BaseModel, Config } = require('./../../../index');
 
 module.exports = class Test extends BaseModel {
   constructor () {
@@ -7,6 +7,7 @@ module.exports = class Test extends BaseModel {
   }
 
   fetchHello () {
+    console.log(new Config());
     return 'hello from model'
   }
 }

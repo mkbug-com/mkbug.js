@@ -5,12 +5,12 @@ const path = require('path');
 
 const { createModule } = require('./bin/helper');
 const { METHODS } = require('./bin/const');
-const { isPromise } = require('./bin/utils');
+const { isPromise, getMethod } = require('./bin/utils');
+
 const BaseController = require('./bin/base.controller');
 const BaseLogic = require('./bin/base.logic');
 const BaseModel = require('./bin/base.model');
-
-const { getMethod } = require('./bin/utils');
+const BaseConfig = require('./bin/base.config');
 
 const router = express.Router();
 
@@ -87,21 +87,13 @@ router.__proto__.attch = function (pre, controller, needParams) {
   });
 }
 
-exports.mkbug = function (opts = {}) {
-  console.info(chalk.bgGreen('Mkbug.js[INFO]:'), chalk.yellow('Welcome to Mkbug.js'));
-  console.log('');
-  const basePath = opts.path || path.resolve(process.cwd(), 'src');
-  const mkbug = createModule(basePath);
-
-  return mkbug;
-}
-
 exports.Mkbug = class Mkbug {
   constructor (app, opts = {}) {
-    console.info(chalk.bgGreen('Mkbug.js[INFO]:'), chalk.yellow('Welcome to Mkbug.js\n'));
+    console.info(chalk.bgGreen('Mkbug.js[INFO]:'), chalk.yellow(`Welcome to Mkbug.js (NODE_ENV = ${process.env.NODE_ENV})\n`));
 
     this.app = app;
     this.basePath = opts.path || path.resolve(process.cwd(), 'src');
+    BaseConfig.prototype.baseUrl = this.basePath;
   }
 
   create (prefix = '') {
@@ -122,3 +114,4 @@ exports.Mkbug = class Mkbug {
 exports.BaseController = BaseController;
 exports.BaseLogic = BaseLogic;
 exports.BaseModel = BaseModel;
+exports.Config = BaseConfig;
