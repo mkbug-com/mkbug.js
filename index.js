@@ -7,6 +7,7 @@ const { METHODS } = require('./bin/const');
 const { isPromise } = require('./bin/utils');
 const BaseController = require('./bin/base.controller');
 const BaseLogic = require('./bin/base.logic');
+const BaseModel = require('./bin/base.model');
 
 const { getMethod } = require('./bin/utils');
 
@@ -85,13 +86,15 @@ router.__proto__.attch = function (pre, controller, needParams) {
   });
 }
 
-exports.router = function (opts = {}) {
+exports.mkbug = function (opts = {}) {
   console.info(chalk.bgGreen('Mkbug.js[INFO]:'), chalk.yellow('Welcome to Mkbug.js'));
+  console.log('');
   const basePath = opts.path || path.resolve(process.cwd(), 'controller');  
-  const router = createModule(basePath);
+  const mkbug = createModule(basePath);
 
-  return router;
+  return mkbug;
 }
 
 exports.BaseController = BaseController;
 exports.BaseLogic = BaseLogic;
+exports.BaseModel = BaseModel;

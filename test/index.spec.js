@@ -2,9 +2,9 @@ const express = require('express');
 
 const app = express();
 
-const {router} = require('../index')
+const { mkbug } = require('../index')
 
-app.use('/demo', router({
+app.use('/demo', mkbug({
   path: './src'
 }))
 
@@ -14,5 +14,5 @@ app.use((req, res) => {
 })
 
 app.listen(3000, (err) => {
-  console.log(err)
+  console.log('Server start')
 });
