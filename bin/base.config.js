@@ -17,8 +17,12 @@ module.exports = class BaseConfig {
       const baseConfig = `${this.name}.conf`;
       const config = `${this.name}.${this.mode}.conf`;
 
-      this.__$$parseFile(fs.readFileSync(`${base}/${baseConfig}`, opts));
-      this.__$$parseFile(fs.readFileSync(`${base}/${config}`, opts));
+      if (fs.existsSync(baseConfig)) {
+        this.__$$parseFile(fs.readFileSync(`${base}/${baseConfig}`, opts));
+      }
+      if (fs.existsSync(config)) {
+        this.__$$parseFile(fs.readFileSync(`${base}/${config}`, opts));
+      }
     } catch (e) {
       console.error(chalk.red('Mkbug.js[ERROR]:', e));
     }

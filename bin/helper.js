@@ -33,6 +33,10 @@ function doParse (modules) {
 
 function parseController (router, dir, { pre = '/', logics = {} }) {
   try {
+    if (!fs.existsSync(dir)) {
+      return;
+    }
+
     const files = fs.readdirSync(dir);
     files.forEach(function createController (file) {
       const stat = fs.lstatSync(`${dir}/${file}`);
@@ -72,6 +76,10 @@ function parseLogic (dir, parent = '', { models = {} }) {
   let logics = {};
 
   try {
+    if (!fs.existsSync(dir)) {
+      return logics;
+    }
+
     const files = fs.readdirSync(dir);
     files.forEach(function createLogic (file) {
       const stat = fs.lstatSync(`${dir}/${file}`);
@@ -120,6 +128,10 @@ function parseModel (dir, parent = '') {
   let models = {};
 
   try {
+    if (!fs.existsSync(dir)) {
+      return models;
+    }
+
     const files = fs.readdirSync(dir);
     files.forEach(function createModel (file) {
       const stat = fs.lstatSync(`${dir}/${file}`);
