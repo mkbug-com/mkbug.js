@@ -14,14 +14,14 @@ module.exports = class BaseConfig {
   __$$parseConfig (opts) {
     const base = path.resolve(this.baseUrl || 'src', 'config');
     try {
-      const baseConfig = `${this.name}.conf`;
-      const config = `${this.name}.${this.mode}.conf`;
+      const baseConfig = `${base}/${this.name}.conf`;
+      const config = `${base}/${this.name}.${this.mode}.conf`;
 
       if (fs.existsSync(baseConfig)) {
-        this.__$$parseFile(fs.readFileSync(`${base}/${baseConfig}`, opts));
+        this.__$$parseFile(fs.readFileSync(baseConfig, opts));
       }
       if (fs.existsSync(config)) {
-        this.__$$parseFile(fs.readFileSync(`${base}/${config}`, opts));
+        this.__$$parseFile(fs.readFileSync(config, opts));
       }
     } catch (e) {
       console.error(chalk.red('Mkbug.js[ERROR]:', e));
