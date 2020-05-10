@@ -11,9 +11,9 @@ let baseDir = '';
 
 function doParse (modules) {
   const {
-    Controller = '',
-    Logic = '',
-    Model = ''
+    Controller = 'controller',
+    Logic = 'logic',
+    Model = 'model'
   } = modules;
 
   const router = express.Router();
