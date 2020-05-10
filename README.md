@@ -96,3 +96,6 @@ A OOP style nodejs web framework base expressjs.
   // src/config/config.dev.conf
   WELCOME_WORD=HELLO [DEV]
 ```
+
+# Changelog
+2020-05-10: [BUGFIX]: 修正Config默认获取src目录

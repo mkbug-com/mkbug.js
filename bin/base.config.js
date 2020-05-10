@@ -12,7 +12,7 @@ module.exports = class BaseConfig {
   }
 
   __$$parseConfig (opts) {
-    const base = path.resolve(this.baseUrl, 'config');
+    const base = path.resolve(this.baseUrl || 'src', 'config');
     try {
       const baseConfig = `${this.name}.conf`;
       const config = `${this.name}.${this.mode}.conf`;
