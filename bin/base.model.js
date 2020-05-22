@@ -1,9 +1,5 @@
-module.exports = class BaseModel {
-  constructor() {
-    this.__$$name = this.constructor.name;
-  }
+const Base = require('./base');
 
-  __$$getName () {
-    return this.__$$name;
-  }
+module.exports = class BaseModel extends Base {
+
 }

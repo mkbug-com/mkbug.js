@@ -1,8 +1,9 @@
 const { _get } = require('./utils');
+const Base = require('./base');
 
-module.exports = class BaseController {
+module.exports = class BaseController extends Base {
   constructor(logics) {
-    this.__$$name = this.constructor.name;
+    super();
     this.__$$logics = logics;
   }
 
@@ -20,10 +21,6 @@ module.exports = class BaseController {
 
   after () {
     
-  }
-
-  __$$getName () {
-    return this.__$$name;
   }
 
   __$$getMethods () {

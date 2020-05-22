@@ -10,7 +10,7 @@ A OOP style nodejs web framework base expressjs.
 
   const app = express();
 
-  const { Mkbug } = require('../index')
+  const { Mkbug } = require('mkbugjs');
 
   new Mkbug(app)
     .create('/demo') // 请求url前缀
