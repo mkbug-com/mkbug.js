@@ -2,13 +2,8 @@ const { _get } = require('./utils');
 const Base = require('./base');
 
 module.exports = class BaseController extends Base {
-  constructor(logics) {
+  constructor() {
     super();
-    this.__$$logics = logics;
-  }
-
-  get Logics () {
-    return this.__$$logics;
   }
 
   getLogic (path, def = null) {

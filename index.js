@@ -15,7 +15,7 @@ const { BaseMiddleware, BaseUtil } = require('./bin/base.plugin');
 
 const router = express.Router();
 
-router.__proto__.attch = function (pre, controller, needParams) {
+router.__proto__.attch = function (pre, controller, needParams, prefix) {
   const name = controller.__$$getName();
   const methods = controller.__$$getMethods();
   const _this = this;
@@ -31,7 +31,7 @@ router.__proto__.attch = function (pre, controller, needParams) {
       } else {
         uri = `${pre}${name.toLowerCase()}/${methodName}`
       }
-      console.info(chalk.yellow('Mkbug.js[INFO]:'), uri);
+      console.info(chalk.yellow('Mkbug.js[INFO]: api ='), `${prefix}${uri}`);
 
       _this[actions[1]](`${uri}`, async function (req, res, next) {
         const ctx = {};
@@ -111,7 +111,7 @@ exports.Mkbug = class Mkbug {
   }
 
   create (prefix = '') {
-    this.app.use(prefix, createModule(this.basePath));
+    this.app.use(prefix, createModule(this.basePath, prefix));
     return this;
   }
 

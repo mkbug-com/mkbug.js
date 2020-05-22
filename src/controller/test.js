@@ -2,10 +2,10 @@ const Base = require('../base/base');
 
 module.exports = class Test3 extends Base {
   before () {
-    return false;
+    return true;
   }
   getList3Action () {
-    return this.Logics.Test2.getHelloWorld();
+    return this.Logics.test1.Test.hello();
   }
 
   putScoueTextAction () {

@@ -5,4 +5,8 @@ module.exports = class Test extends BaseLogic {
     super();
     this.test = 'OK'
   }
+
+  hello () {
+    return this.Models.model2.Test.fetchHello();
+  }
 }
