@@ -98,6 +98,6 @@ A OOP style nodejs web framework base expressjs.
 ```
 
 # Changelog
-2020-05-10: [BUGFIX]: 修正Config默认获取src目录
-2020-05-10: [BUGFIX]: 修正默认获取代码路径
-2020-05-10: [OPTIMIZE]: 优化文件不存在提示
+2020-05-10: [BUGFIX]: 修正Config默认获取src目录<br/>
+2020-05-10: [BUGFIX]: 修正默认获取代码路径<br/>
+2020-05-10: [OPTIMIZE]: 优化文件不存在提示<br/>
