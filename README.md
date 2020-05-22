@@ -36,11 +36,25 @@ A OOP style nodejs web framework base expressjs.
 # BaseLogic 
 ```
   // 继承自BaseLogic 且存在于logic目录的模块会自动注入到 controller对象的Logics中
+  const { BaseLogic } = require('mkbugjs');
+
+  module.exports = class Test1 extends BaseLogic {
+    getHelloWorld () {
+      return this.Models.Test.fetchHello();
+    }
+  }
 ```
 
 # BaseModel
 ```
   // 继承自BaseModel 且存在于model目录的模块会自动注入到 logic对象的Models中
+  const { BaseModel, Config } = require('mkbugjs');
+
+  module.exports = class Test extends BaseModel {
+    fetchHello () {
+      return new Config().WELCOME_WORD;
+    }
+  }
 ```
 
 # Config
@@ -82,7 +96,7 @@ A OOP style nodejs web framework base expressjs.
   }
 
   // src/model/test.js
-  const { BaseModel, Config } = require('./../../../index');
+  const { BaseModel, Config } = require('mkbugjs');
 
   module.exports = class Test extends BaseModel {
     fetchHello () {
