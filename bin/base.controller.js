@@ -1,3 +1,5 @@
+const chalk = require('chalk');
+
 const { _get } = require('./utils');
 const Base = require('./base');
 
@@ -14,8 +16,8 @@ module.exports = class BaseController extends Base {
     return true;
   }
 
-  after () {
-    
+  after ({ duration, status, originalUrl, request, response }) {
+    console.info(chalk.yellow(`Mkbug.js[INFO]: `), `${duration}ms [${status}]${originalUrl}`);
   }
 
   __$$getMethods () {

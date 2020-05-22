@@ -22,15 +22,18 @@ function doParse (modules, prefix) {
   console.info(chalk.yellow('==========Mkbug utils inject start==========='));
   const utils = parseUtil(path.resolve(baseDir, 'plugin'));
   console.info(chalk.yellow('==========Mkbug utils inject end=============\n'));
+
   console.info(chalk.yellow('==========Mkbug model inject start==========='));
   BaseModel.prototype.Utils = utils
   const models = parseModel(path.resolve(baseDir, Model), '');
   console.info(chalk.yellow('==========Mkbug model inject end=============\n'));
+
   console.info(chalk.yellow('==========Mkbug logic inject start==========='));
   BaseLogic.prototype.Models = models
   BaseLogic.prototype.Utils = utils
   const logics = parseLogic(path.resolve(baseDir, Logic), '');
   console.info(chalk.yellow('==========Mkbug logic inject end=============\n'));
+  
   console.info(chalk.yellow('==========Mkbug controller mapping start=========='));
   BaseController.prototype.Logics = logics
   BaseController.prototype.Utils = utils

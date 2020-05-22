@@ -28,7 +28,7 @@ A OOP style nodejs web framework base expressjs.
 
   before () // 请求前置拦截器，默认返回true，如果返回false将直接返回。 也可以自己通过this.res自己处理
 
-  after () // 请求返回前的拦截器，通常用于处理日志
+  after ({ duration /* 请求耗费时间 */, status /* 请求执行状态 */, originalUrl  /* 请求访问路径 */, request, response }) // 请求返回前的拦截器，通常用于处理日志
 
   [get|post|put|delete|head|options|update|patch]XXXAction // get接口，return 内容作为返回的结果。可以通过this.type和this.status修改返回状态
 ```
