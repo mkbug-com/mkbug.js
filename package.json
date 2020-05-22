@@ -1,6 +1,6 @@
 {
   "name": "mkbugjs",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "description": "The OOP style framework for expressjs",
   "main": "index.js",
   "scripts": {

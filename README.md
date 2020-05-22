@@ -57,6 +57,18 @@ A OOP style nodejs web framework base expressjs.
   }
 ```
 
+# BaseUtil
+```
+  // 用于各种工具类或者工具函数的封装 可以在controller, logic, model中直接通过this调用。支持getPath
+  const { BaseUtil } = require('mkbugjs');
+
+  module.exports = class Test extends BaseUtil {
+    fetchHello () {
+      return new Config().WELCOME_WORD;
+    }
+  }
+```
+
 # Config
 ```
   new Config('xxx') // 会自动读取src/config目录下文件。xxx.xxx.js的内容会覆盖xxx.js的内容实现配置信息的继承。
@@ -95,12 +107,24 @@ A OOP style nodejs web framework base expressjs.
     }
   }
 
+  // src/plugin/test.js
+  const { BaseUtil } = require('mkbugjs');
+
+  module.exports = class Util extends BaseUtil {
+    getHello () {
+      return 'Hello';
+    }
+  }
+
   // src/model/test.js
   const { BaseModel, Config } = require('mkbugjs');
 
   module.exports = class Test extends BaseModel {
     fetchHello () {
-      return new Config().WELCOME_WORD;
+      
+      return { 
+        msg: new Config().WELCOME_WORD + this.Utils.Util.getHello()
+      };
     }
   }
 
@@ -112,6 +136,8 @@ A OOP style nodejs web framework base expressjs.
 ```
 
 # Changelog
+2020-05-22: [FEATURE]: 增加Util工具类plugin的自动注入<br/>
+2020-05-22: [BUGFIX]: Controller无法正确根据路径识别路由的问题<br/>
 2020-05-10: [BUGFIX]: 修正Config默认获取src目录<br/>
 2020-05-10: [BUGFIX]: 修正默认获取代码路径<br/>
 2020-05-10: [OPTIMIZE]: 优化文件不存在提示<br/>
