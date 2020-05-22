@@ -1,6 +1,6 @@
-const { BaseController } = require('./../../../index');
+const Base = require('../../base/base');
 
-module.exports = class Test8 extends BaseController {
+module.exports = class Test8 extends Base {
   getListAction () {
     return this.params.id;
   }

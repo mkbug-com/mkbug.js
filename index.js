@@ -44,6 +44,7 @@ router.__proto__.attch = function (pre, controller, needParams) {
         ctx.status = 200;
         ctx.type = null;
 
+        const start = new Date().getTime();
         for (let key in controller) {
           ctx[key] = controller[key];
         }
@@ -61,7 +62,6 @@ router.__proto__.attch = function (pre, controller, needParams) {
         if (beforeRet === true) {
           data = controller[method].call(ctx, req, res, next);
         }
-        const after = controller.after.call(ctx, req, res, next);
 
         if (beforeRet === true) {
           let result = null;
@@ -89,6 +89,13 @@ router.__proto__.attch = function (pre, controller, needParams) {
             res.end('Method not allowed');
           }
         }
+        controller.after.call(ctx, {
+          duration: new Date().getTime() - start,
+          status: ctx.status,
+          originalUrl: ctx.req.originalUrl,
+          request: ctx.req,
+          response: ctx.res
+        });
       })
     }
   });

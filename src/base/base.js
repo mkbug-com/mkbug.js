@@ -5,4 +5,8 @@ module.exports = class Base extends BaseController {
     this.before()
     return 'hello';
   }
+
+  after ({duration, status, originalUrl}) {
+    console.log(duration, status, originalUrl)
+  }
 }
