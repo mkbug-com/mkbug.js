@@ -2,7 +2,7 @@ const { BaseModel, Config } = require('./../../../index');
 
 module.exports = class Test extends BaseModel {
   constructor () {
-    super(...arguments);
+    super();
     this.test = 'OK'
   }
 

@@ -6,7 +6,7 @@ const chalk = require('chalk');
 const BaseController = require('./base.controller');
 const BaseLogic = require('./base.logic');
 const BaseModel = require('./base.model');
-const { BaseUtil } = require('./base.plugin');
+const { BaseUtil, BaseMiddleware } = require('./base.plugin');
 
 let baseDir = '';
 
@@ -20,7 +20,7 @@ function doParse (modules, prefix) {
   const router = express.Router();
 
   console.info(chalk.yellow('==========Mkbug utils inject start==========='));
-  const utils = parseUtil(path.resolve(baseDir, 'plugin'));
+  const { utils, plugins } = parseUtil(path.resolve(baseDir, 'plugin'));
   console.info(chalk.yellow('==========Mkbug utils inject end=============\n'));
 
   console.info(chalk.yellow('==========Mkbug model inject start==========='));
@@ -191,6 +191,7 @@ function parseModel (dir, parent = '') {
 
 function parseUtil (dir, parent = '') {
   let utils = {};
+  let plugins = [];
 
   try {
     if (!fs.existsSync(dir)) {
@@ -201,20 +202,24 @@ function parseUtil (dir, parent = '') {
     files.forEach(function createUtil (file) {
       const stat = fs.lstatSync(`${dir}/${file}`);
       if (stat.isFile()) {
-        const Util = require(`${dir}/${file}`);
-        if (typeof Util === 'function' && Util.constructor) {
-          const util = new Util();
-          if (util instanceof BaseUtil) {
+        const Plugin = require(`${dir}/${file}`);
+        if (typeof Plugin === 'function' && Plugin.constructor) {
+          const plugin = new Plugin();
+          if (plugin instanceof BaseUtil) {
             console.info(chalk.yellow('Mkbug.js[INFO]:'), 
-              `Inject util = ${parent !== '' ? parent + '.' : parent}${util.__$$getName()}`);
-            if (utils[util.__$$getName()]) {
-              utils[util.__$$getName()].__proto__ = util;
+              `Inject util = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
+            if (utils[plugin.__$$getName()]) {
+              utils[plugin.__$$getName()].__proto__ = plugin;
             } else {
-              utils[util.__$$getName()] = util;
+              utils[plugin.__$$getName()] = plugin;
             }
+          } else if (plugin instanceof BaseMiddleware) {
+            console.info(chalk.yellow('Mkbug.js[INFO]:'), 
+              `Inject middleware = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
+              plugins.push(plugin);
           } else {
             console.warn(chalk.magenta('Mkbug.js[WARN]:'),
-              chalk.bgMagenta(`Util ${file} must extends from BaseUtil or will be ignored!`));
+              chalk.bgMagenta(`Plugin ${file} must extends from BaseUtil or BaseMiddleware and will be ignored!`));
           }
         } else {
           console.warn(chalk.magenta('Mkbug.js[WARN]:'), chalk.bgMagenta(`${file} will be ignored!`));
@@ -222,22 +227,27 @@ function parseUtil (dir, parent = '') {
       } else if (stat.isDirectory()) {
         if (utils[file]) {
           console.warn(chalk.magenta('Mkbug.js[WARN]:'),
-              chalk.bgMagenta(`Util ${file} is existed, the same properties will be overrode!`));
+              chalk.bgMagenta(`Plugin ${file} is existed, the same properties will be overrode!`));
         }
-        const subUtil = parseUtil(path.resolve(dir, file), `${parent !== '' ? (parent + '.' + file) : file}`) || {};
+        const subObj = parseUtil(path.resolve(dir, file), `${parent !== '' ? (parent + '.' + file) : file}`) || {};
         if (!utils[file]) {
-          utils[file] = {}
+          utils[file] = {};
         }
-        Object.keys(subUtil).forEach(function injectSubUtil (sub) {
-          utils[file][sub] = subUtil[sub];
+        Object.keys(subObj.utils).forEach(function injectSubUtil (sub) {
+          utils[file][sub] = subObj.utils[sub];
         })
+
+        plugins = plugins.concat(subObj.plugins);
       }
     });
   } catch (e) {
     console.error(chalk.red('Mkbug.js[ERROR]:', e));
   }
 
-  return utils;
+  return {
+    utils,
+    plugins
+  };
 }
 
 exports.createModule = function (path, prefix) {
