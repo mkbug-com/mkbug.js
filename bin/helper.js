@@ -7,6 +7,7 @@ const BaseController = require('./base.controller');
 const BaseLogic = require('./base.logic');
 const BaseModel = require('./base.model');
 const { BaseUtil, BaseMiddleware } = require('./base.plugin');
+const { createContext } = require('./utils');
 
 let baseDir = '';
 
@@ -21,6 +22,15 @@ function doParse (modules, prefix) {
 
   console.info(chalk.yellow('==========Mkbug utils inject start==========='));
   const { utils, plugins } = parseUtil(path.resolve(baseDir, 'plugin'));
+  const createMiddleware = (plugin) => {
+    return (res, req, next) => {
+      const ctx = createContext(plugin, res, req);
+      plugin.run.call(ctx, res, req, next);
+    }
+  }
+  plugins.forEach((plugin) => {
+    router.use(createMiddleware(plugin))
+  })
   console.info(chalk.yellow('==========Mkbug utils inject end=============\n'));
 
   console.info(chalk.yellow('==========Mkbug model inject start==========='));
@@ -237,7 +247,7 @@ function parseUtil (dir, parent = '') {
           utils[file][sub] = subObj.utils[sub];
         })
 
-        plugins = plugins.concat(subObj.plugins);
+        plugins.push(...subObj.plugins);
       }
     });
   } catch (e) {

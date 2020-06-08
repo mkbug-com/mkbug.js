@@ -8,7 +8,8 @@ module.exports = class TestMiddleware extends BaseMiddleware {
   }
 
   exec (req, res) {
-
+    res.test = this.getWord()
+    throw new Error('test')
   }
 
   getWord () {

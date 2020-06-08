@@ -28,5 +28,18 @@ module.exports = {
     return basePath.reduce((ret, next) => {
       return ret === undefined ? undefined : ret[next];
     }, obj) || def;
+  },
+  createContext (source, req, res) {
+    const ctx = {};
+    ctx.__proto__ = source.__proto__;
+    ctx.req = req;
+    ctx.res = res;
+    ctx.query = req.query;
+    ctx.body = req.body;
+    ctx.params = req.params;
+    ctx.status = 200;
+    ctx.type = null;
+
+    return ctx;
   }
 }

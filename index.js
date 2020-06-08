@@ -5,7 +5,7 @@ const path = require('path');
 
 const { createModule } = require('./bin/helper');
 const { METHODS } = require('./bin/const');
-const { isPromise, getMethod } = require('./bin/utils');
+const { isPromise, getMethod, createContext } = require('./bin/utils');
 
 const BaseController = require('./bin/base.controller');
 const BaseLogic = require('./bin/base.logic');
@@ -34,17 +34,19 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
       console.info(chalk.yellow('Mkbug.js[INFO]: api ='), `${prefix}${uri}`);
 
       _this[actions[1]](`${uri}`, async function (req, res, next) {
-        const ctx = {};
-        ctx.__proto__ = controller.__proto__;
-        ctx.req = req;
-        ctx.res = res;
-        ctx.query = req.query;
-        ctx.body = req.body;
-        ctx.params = req.params;
-        ctx.status = 200;
-        ctx.type = null;
-
+        const ctx = createContext(controller, req, res);
         const start = new Date().getTime();
+
+        res.on('finish', () => {
+          controller.after.call(ctx, {
+            duration: new Date().getTime() - start,
+            status: ctx.status,
+            originalUrl: ctx.req.originalUrl,
+            request: ctx.req,
+            response: ctx.res
+          })
+        })
+
         for (let key in controller) {
           ctx[key] = controller[key];
         }
@@ -89,13 +91,6 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
             res.end('Method not allowed');
           }
         }
-        controller.after.call(ctx, {
-          duration: new Date().getTime() - start,
-          status: ctx.status,
-          originalUrl: ctx.req.originalUrl,
-          request: ctx.req,
-          response: ctx.res
-        });
       })
     }
   });
