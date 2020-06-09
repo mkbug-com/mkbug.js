@@ -7,6 +7,6 @@ module.exports = class Base extends BaseController {
   }
 
   after ({duration, status, originalUrl}) {
-    console.log(duration, status, originalUrl)
+    console.log(duration + 'ms', status, originalUrl)
   }
 }
