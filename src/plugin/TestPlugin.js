@@ -9,8 +9,8 @@ module.exports = class TestMiddleware extends BaseMiddleware {
 
   async exec (req, res) {
     res.test = this.getWord()
-    // throw new MkbugError(200, 'test')
-    return Promise.resolve()
+    throw new MkbugError(200, 'test')
+    // return Promise.resolve()
   }
 
   getWord () {
