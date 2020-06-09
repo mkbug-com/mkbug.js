@@ -31,7 +31,7 @@ module.exports = {
   },
   createContext (source, req, res) {
     const ctx = {};
-    ctx.__proto__ = source.__proto__;
+    ctx.__proto__ = source;
     ctx.req = req;
     ctx.res = res;
     ctx.query = req.query;

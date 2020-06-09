@@ -1,4 +1,4 @@
-const { BaseMiddleware } = require('./../../index');
+const { BaseMiddleware, MkbugError } = require('./../../index');
 
 module.exports = class TestMiddleware extends BaseMiddleware {
   constructor() {
@@ -7,9 +7,10 @@ module.exports = class TestMiddleware extends BaseMiddleware {
     this.name = 'middleware test'
   }
 
-  exec (req, res) {
+  async exec (req, res) {
     res.test = this.getWord()
-    throw new Error('test')
+    // throw new MkbugError(200, 'test')
+    return Promise.resolve()
   }
 
   getWord () {
