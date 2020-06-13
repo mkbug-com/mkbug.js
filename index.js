@@ -98,7 +98,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
 
 exports.Mkbug = class Mkbug {
   constructor (app, opts = {}) {
-    console.info(chalk.bgGreen('Mkbug.js[INFO]:'), chalk.yellow(`Welcome to Mkbug.js (NODE_ENV = ${process.env.NODE_ENV})\n`));
+    console.info(chalk.bgGreen('Mkbug.js[INFO]:'), chalk.yellow(`Welcome to Mkbug.js (NODE_ENV = ${process.env.NODE_ENV || ''})\n`));
 
     this.app = app;
     this.basePath = opts.path || path.resolve(process.cwd(), 'src');

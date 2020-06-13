@@ -5,7 +5,7 @@ const fs = require('fs');
 module.exports = class BaseConfig {
   constructor (name = 'config', opts = { encoding: 'utf8' }) {
     this.name = name;
-    this.mode = process.env.NODE_ENV;
+    this.mode = process.env.NODE_ENV || '';
     this.values = {};
 
     return this.__$$parseConfig(opts);
