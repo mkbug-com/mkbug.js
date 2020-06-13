@@ -1,8 +1,8 @@
 # mkbug.js
-A OOP style nodejs web framework base expressjs.
+A OOP style declare Nodejs Web framework base on Express.js
 
 # What is mkbug.js
-一个基于expressjs封装的OOP风格的restful api框架。提供了controller -> logic -> model的封装和抽象，以及服务器配置管理的抽象。帮助创建易于维护的系统。
+`Mkbug.js`是一个`OOP`风格声明式`Nodejs`框架。只需要声明并继承了对应接口的`Class`即可轻松的开发一个`Nodejs API`应用服务。
 
 # Mkbug.js VS Egg.js VS Think.js
 
@@ -17,11 +17,11 @@ A OOP style nodejs web framework base expressjs.
 | 中间件管理 | 手动+自动 | 手动 | 手动 |
 | 配置信息管理 | 自动 | 无 | 无 |
 | JS扩展 | 原生 | 原生 | Babel |
-| 代码风格 | OOP | 原生 | 原生 |
+| 代码风格 | OOP声明式 | 原生 | 原生 |
 | 响应耗时 | 有 | 无 | 无 |
 | 页面渲染 | 无差别使用expressjs渲染中间件 | egg页面渲染中间件 | 兼容koa页面渲染中间件 |
 | 扩展能力 | 无差别使用expressjs | egg生态中间件 | 兼容koa页面渲染中间件 |
-| 维护团队 | 个人 | 阿里 | 360 |
+| 维护团队 | 个人 | 阿里 | 个人 |
 
 # Mkbug
 ```
