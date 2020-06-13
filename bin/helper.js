@@ -205,7 +205,10 @@ function parseUtil (dir, parent = '') {
 
   try {
     if (!fs.existsSync(dir)) {
-      return utils;
+      return {
+        utils,
+        plugins
+      };
     }
 
     const files = fs.readdirSync(dir);
