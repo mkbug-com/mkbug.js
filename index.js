@@ -63,9 +63,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
 
         if (beforeRet === true) {
           data = controller[method].call(ctx, req, res, next);
-        }
-
-        if (beforeRet === true) {
+ 
           let result = null;
           if (isPromise(data)) {
             result = await data;
