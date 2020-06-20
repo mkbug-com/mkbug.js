@@ -19,7 +19,7 @@ module.exports = {
     return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
   },
   getMethod (method) {
-    const re = new RegExp(/^(get|post|delete|put|update|options|patch|head)(.*)(Action$)/);
+    const re = new RegExp(/^(get|head|post|put|delete|connect|options|patch|trace)(.*)(Action$)/);
     return re[Symbol.match](method)
   },
   _get (obj, path, def) {

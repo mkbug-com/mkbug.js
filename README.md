@@ -157,6 +157,7 @@ A OOP style declare Nodejs Web framework base on Express.js
 ```
 
 # Changelog
+2020-06-20: [BUGFIX]: 跟路径多一个`/`,部分文案优化<br/>
 2020-05-22: [FEATURE]: 增加Util工具类plugin的自动注入<br/>
 2020-05-22: [FEATURE]: controller, logic, model在原型链上的隔离，使之无法跨层直接访问。避免用户通过原型链跨调用层在controller中调model<br/>
 2020-05-22: [BUGFIX]: Controller无法正确根据路径识别路由的问题<br/>
