@@ -106,7 +106,11 @@ exports.Mkbug = class Mkbug {
   }
 
   create (prefix = '') {
-    this.app.use(prefix, createModule(this.basePath, prefix));
+    let prePath = prefix;
+    if (prefix === '/') {
+      prePath = ''
+    }
+    this.app.use(prePath, createModule(this.basePath, prePath));
     return this;
   }
 
