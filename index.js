@@ -105,14 +105,11 @@ exports.Mkbug = class Mkbug {
     this.app = app;
     this.basePath = opts.path || path.resolve(process.cwd(), 'src');
     BaseConfig.prototype.baseUrl = this.basePath;
+    this.prefix = '';
   }
 
   create (prefix = '') {
-    let prePath = prefix;
-    if (prefix === '/') {
-      prePath = ''
-    }
-    this.app.use(prePath, createModule(this.basePath, prePath));
+    this.prefix = prefix;
     return this;
   }
 
@@ -122,7 +119,18 @@ exports.Mkbug = class Mkbug {
   }
 
   start (port, cb) {
-    this.app.listen(port, cb);
+    let prePath = this.prefix;
+    if (this.prefix === '/') {
+      prePath = ''
+    }
+    this.app.use(prePath, createModule(this.basePath, prePath));
+    this.app.listen(port, cb || function callback (err) {
+      if (err) {
+        console.error(chalk.bgRed(`Mkbug.js[ERROR]: Start with [PORT=${port}]\n`), err);
+      } else {
+        console.info(chalk.bgGreen(`Mkbug.js[INFO]: Start with [PORT=${port}]\n`));
+      }
+    });
   }
 }
 
