@@ -17,7 +17,7 @@ module.exports = class BaseController extends Base {
   }
 
   after ({ duration, status, originalUrl, request, response }) {
-    console.info(chalk.yellow(`Mkbug.js[INFO]: `), `${duration}ms [${status}]${originalUrl}`);
+    console.info(chalk.yellow(`Mkbug.js[INFO]: `), `${duration}ms [${status}][${request.method}]${originalUrl}`);
   }
 
   __$$getMethods () {

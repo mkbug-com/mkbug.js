@@ -32,7 +32,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
         } else {
           uri = methodName.length > 0 ? `${pre}${name.toLowerCase()}/${methodName}` : `${pre}${name.toLowerCase()}`
         }
-        console.info(chalk.yellow(`Mkbug.js[INFO]: api [${actions[1]}] =`), `${prefix}${uri}`);
+        console.info(chalk.yellow(`Mkbug.js[INFO]: api = [${actions[1]}]`), `${prefix}${uri}`);
 
         _this[actions[1]](`${uri}`, async function (req, res, next) {
           const ctx = createContext(controller, req, res);
@@ -92,6 +92,8 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
           }
         })
       }
+    } else {
+      console.warn(chalk.magenta('Mkbug.js[WARN]:'), chalk.magenta(`${method} in Controller '${name}' is not right HTTP Method.\n`));
     }
   });
 }
