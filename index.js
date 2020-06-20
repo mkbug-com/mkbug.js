@@ -29,7 +29,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
       if (needParams) {
         uri = methodName.length > 0 ? `${pre}${methodName}` : `${pre.substring(0, pre.length - 1)}`
       } else {
-        uri = `${pre}${name.toLowerCase()}/${methodName}`
+        uri = methodName.length > 0 ? `${pre}${name.toLowerCase()}/${methodName}` : `${pre}${name.toLowerCase()}`
       }
       console.info(chalk.yellow('Mkbug.js[INFO]: api ='), `${prefix}${uri}`);
 

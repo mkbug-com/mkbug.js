@@ -86,7 +86,9 @@ function parseController (router, dir, { pre = '/', prefix }) {
           console.warn(chalk.magenta('Mkbug.js[WARN]:'), chalk.bgMagenta(`${file} will be ignored!`));
         }
       } else if (stat.isDirectory()) {
-        subPath += `${file}/`
+        if (!file.startsWith('_')) {
+          subPath += `${file}/`
+        }
         parseController(router, path.resolve(dir, file), { pre: subPath, prefix });
       }
     });
