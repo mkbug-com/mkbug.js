@@ -1,4 +1,5 @@
 # mkbug.js
+[![npm downloads](https://img.shields.io/npm/dm/mkbugjs.svg?style=flat-square)](http://npm-stat.com/charts.html?package=mkbugjs)
 A OOP style declare Nodejs Web framework base on Express.js
 
 [官方文档](http://doc.mkbug.com)
