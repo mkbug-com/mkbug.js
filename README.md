@@ -25,3 +25,31 @@ A OOP style declare Nodejs framework base on Express.js！
 | 页面渲染 | 无差别使用expressjs渲染中间件 | egg页面渲染中间件 | 兼容koa页面渲染中间件 |
 | 扩展能力 | 无差别使用expressjs | egg生态中间件 | 兼容koa页面渲染中间件 |
 | 维护团队 | 个人 | 阿里 | 个人 |
+
+## 创建第一个应用
+```js
+  // index.js
+  const express = require('express');
+  const app = express();
+
+  const { Mkbug } = require('mkbugjs');
+
+  new Mkbug(app)
+    .create('/') // 请求url前缀
+    .use(bodyParser.json()) // 使用express中间件
+    .start(3001, (err) => { // 启动，同app.listen
+    if (!err)
+      console.log('Server started!')
+    else
+      console.error('Server start failed!')
+  })
+
+  // src/controller/index.js
+  const { BaseController } = require('mkbugjs');
+
+  module.exports = class HelloWorld extends BaseController {
+    getAction () {
+      return 'Hello World';
+    }
+  }
+```
