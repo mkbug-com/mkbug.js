@@ -4,7 +4,7 @@
   "description": "A OOP style declare Nodejs Web framework base on Express.js",
   "main": "index.js",
   "scripts": {
-    "init": "npm i express chalk"
+    "init": "npm i express chalk jest"
   },
   "repository": {
     "type": "git",
@@ -33,5 +33,10 @@
   "peerDependencies": {
     "express": "^4.1.1",
     "chalk": "^4.0.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "express": "^4.17.1",
+    "jest": "^26.1.0"
   }
 }

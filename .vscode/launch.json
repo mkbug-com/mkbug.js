@@ -11,7 +11,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/test/index.spec.js",
+      "program": "${workspaceFolder}/example/index.js",
       "env": {
         "NODE_ENV": "dev"
       },
