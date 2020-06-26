@@ -3,7 +3,7 @@ const express = require('express');
 const { Mkbug } = require('./../index');
 
 new Mkbug(express(), {
-  path: '/example'
+  path: './example'
 })
 .create('/api')
 .use((req, res) => {
