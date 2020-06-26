@@ -47,7 +47,7 @@ A OOP style declare Nodejs framework base on Express.js！
   // src/controller/index.js
   const { BaseController } = require('mkbugjs');
 
-  module.exports = class HelloWorld extends BaseController {
+  module.exports = class api extends BaseController {
     getAction () {
       return 'Hello World';
     }
