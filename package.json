@@ -1,10 +1,11 @@
 {
   "name": "mkbugjs",
-  "version": "2.0.0.beta.1",
+  "version": "2.0.0-beta.1",
   "description": "A OOP style declare Nodejs Web framework base on Express.js",
   "main": "index.js",
   "scripts": {
-    "init": "npm i express chalk jest supertest"
+    "init": "npm i express chalk jest supertest",
+    "test": "jest"
   },
   "repository": {
     "type": "git",

@@ -1,9 +1,7 @@
 const express = require('express');
 const Stream = require('stream');
 const chalk = require('chalk');
-const path = require('path');
 
-const { createModule } = require('./bin/helper');
 const { METHODS } = require('./bin/const');
 const { isPromise, getMethod, createContext } = require('./bin/utils');
 
@@ -12,6 +10,7 @@ const BaseLogic = require('./bin/base.logic');
 const BaseModel = require('./bin/base.model');
 const BaseConfig = require('./bin/base.config');
 const { BaseMiddleware, BaseUtil, MkbugError } = require('./bin/base.plugin');
+const Mkbug = require('./bin/mkbug');
 
 const router = express.Router();
 
@@ -98,42 +97,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
   });
 }
 
-exports.Mkbug = class Mkbug {
-  constructor (app, opts = {}) {
-    console.info(chalk.bgGreen('Mkbug.js[INFO]:'), chalk.yellow(`Welcome to Mkbug.js (NODE_ENV = ${process.env.NODE_ENV || ''})\n`));
-
-    this.app = app;
-    this.basePath = opts.path || path.resolve(process.cwd(), 'src');
-    BaseConfig.prototype.baseUrl = this.basePath;
-    this.prefix = '';
-  }
-
-  create (prefix = '') {
-    this.prefix = prefix;
-    return this;
-  }
-
-  use (middleWare) {
-    this.app.use(middleWare);
-    return this;
-  }
-
-  start (port, cb) {
-    let prePath = this.prefix;
-    if (this.prefix === '/') {
-      prePath = ''
-    }
-    this.app.use(prePath, createModule(this.basePath, prePath));
-    this.app.listen(port, cb || function callback (err) {
-      if (err) {
-        console.error(chalk.bgRed(`Mkbug.js[ERROR]: Start with [PORT=${port}]\n`), err);
-      } else {
-        console.info(chalk.bgGreen(`Mkbug.js[INFO]: Start with [PORT=${port}]\n`));
-      }
-    });
-  }
-}
-
+exports.Mkbug = Mkbug;
 exports.BaseController = BaseController;
 exports.BaseLogic = BaseLogic;
 exports.BaseModel = BaseModel;
