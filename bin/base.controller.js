@@ -12,7 +12,7 @@ module.exports = class BaseController extends Base {
     return _get(this.Logics, path, def);
   }
 
-  before () {
+  before (request, response) {
     return true;
   }
 
