@@ -6,7 +6,7 @@ const chalk = require('chalk');
 const BaseController = require('./base.controller');
 const BaseLogic = require('./base.logic');
 const BaseModel = require('./base.model');
-const { BasePlugin } = require('./base.plugin');
+const BasePlugin = require('./base.plugin');
 const BaseUtil = require('./base.util');
 const { createContext } = require('./utils');
 
