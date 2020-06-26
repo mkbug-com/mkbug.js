@@ -1,5 +1,4 @@
-const { TestScheduler } = require("jest");
-
+require('./init')
 const Mkbug = require('./../bin/mkbug');
 const request = require('supertest');
 const express = require('express');
