@@ -10,7 +10,8 @@ const BaseLogic = require('./bin/base.logic');
 const BaseModel = require('./bin/base.model');
 const BaseConfig = require('./bin/base.config');
 const BaseUtil = require('./bin/base.util');
-const { BasePlugin, MkbugError } = require('./bin/base.plugin');
+const BasePlugin = require('./bin/base.plugin');
+const MkbugError = require('./bin/base.mkbugerror');
 const Mkbug = require('./bin/mkbug');
 
 const router = express.Router();
