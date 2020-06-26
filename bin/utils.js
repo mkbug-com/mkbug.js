@@ -1,3 +1,5 @@
+const chalk = require('chalk');
+
 function str2path (path) {
   let ret = [];
   const keys = path.split('.');
@@ -13,6 +15,8 @@ function str2path (path) {
   })
   return ret;
 }
+
+const isTest = process.env.NODE_ENV !== 'JEST'
 
 module.exports = {
   isPromise (obj) {
@@ -41,5 +45,17 @@ module.exports = {
     ctx.type = null;
 
     return ctx;
+  },
+  LOG (msg) {
+    isTest && console.log('Mkbug.js[LOG  ]:', msg);
+  },
+  INFO (msg) {
+    isTest && console.info(chalk.yellow('Mkbug.js[INFO ]:'), chalk.yellow(msg));
+  },
+  WARN (msg) {
+    isTest && console.warn(chalk.magenta('Mkbug.js[WARN ]:'), chalk.magenta(msg));
+  },
+  ERROR (msg) {
+    isTest && console.error(chalk.red('Mkbug.js[ERROR]:'), chalk.red(msg));
   }
 }

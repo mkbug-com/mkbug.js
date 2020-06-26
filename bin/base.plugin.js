@@ -1,7 +1,7 @@
 const Base = require('./base');
 const { isPromise } = require('./utils');
 
-class BaseMiddleware extends Base {
+class BasePlugin extends Base {
   exec (req, res) {
     
   }
@@ -16,7 +16,7 @@ class MkbugError extends Error {
   }
 };
 
-BaseMiddleware.prototype.run = async function (req, res, next) {
+BasePlugin.prototype.run = async function (req, res, next) {
   try {
     const result = this.exec(req, res)
     if (isPromise(result)) {
@@ -37,10 +37,6 @@ BaseMiddleware.prototype.run = async function (req, res, next) {
   }
 };
 
-exports.BaseMiddleware = BaseMiddleware;
-
-exports.BaseUtil = class BaseUtil extends Base {
-
-};
+exports.BasePlugin = BasePlugin;
 
 exports.MkbugError = MkbugError;

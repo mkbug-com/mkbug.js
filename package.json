@@ -4,8 +4,8 @@
   "description": "A OOP style declare Nodejs Web framework base on Express.js",
   "main": "index.js",
   "scripts": {
-    "init": "npm i express chalk jest supertest",
-    "test": "jest"
+    "init": "npm i express chalk jest axios",
+    "test": "node test/init.js && jest"
   },
   "repository": {
     "type": "git",
@@ -36,9 +36,9 @@
     "chalk": "^4.0.0"
   },
   "devDependencies": {
+    "axios": "^0.19.2",
     "chalk": "^4.1.0",
     "express": "^4.17.1",
-    "jest": "^26.1.0",
-    "supertest": "^4.0.2"
+    "jest": "^26.1.0"
   }
 }
