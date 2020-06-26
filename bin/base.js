@@ -8,7 +8,7 @@ module.exports = class Base {
     return this.__$$name;
   }
 
-  getUtils (path, def = null) {
+  getUtil (path, def = null) {
     return _get(this.Utils, path, def);
   }
 }
