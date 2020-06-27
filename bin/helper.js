@@ -150,6 +150,9 @@ function parseLogic(dir, parent = '') {
         logics[file] = {}
       }
       Object.keys(subLogics).forEach(function injectSubLogic(sub) {
+        if (logics[file][sub]) {
+          WARN(`Logic ${file}.${sub} is be overrode!`);
+        }
         logics[file][sub] = subLogics[sub];
       })
     }

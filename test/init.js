@@ -18,7 +18,7 @@ new Mkbug(express(), {
   res.end();
 })
 .use('/close', (req, res) => {
-  res.status(200).end('server down!')
+  res.status(200).end('server down!\n')
   process.exit(0);
 })
 .create('/api')

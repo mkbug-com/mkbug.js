@@ -1,4 +1,5 @@
 const Config = require('../bin/base.config');
+const request = require('superagent');
 
 describe("Config", () => {
   it("初始化 默认路径", () => {
@@ -31,5 +32,19 @@ describe("Config", () => {
     process.env.NODE_ENV = 'JEST';
     const case3 = new Config('case3', './example');
     expect(case3.msg2).toBe('test2')
+  });
+
+  it("初始化 JEST From Mkbug", async () => {
+    let ret = null;
+    try {
+      ret = await request.get('http://localhost:3000/api/configtest/defaultconfig')
+    } catch (err) {
+      ret = err;
+    } finally {
+      expect(ret.status).toBe(200)
+      expect(ret.body).toEqual({
+        "msg": "test1"
+      })
+    }
   });
 });
