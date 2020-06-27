@@ -22,9 +22,9 @@ BasePlugin.prototype.run = async function (req, res, next) {
   } catch (e) {
     if (!res.finished && e instanceof MkbugError) {
       if (typeof e.body === 'object') {
-        res.status(e.status).json(e.body).end();
+        res.status(e.status).json(e.body);
       } else {
-        res.status(e.status).end(e.body).end();
+        res.status(e.status).end(e.body);
       }
     } else if (!res.finished) {
       res.status(500).json({
