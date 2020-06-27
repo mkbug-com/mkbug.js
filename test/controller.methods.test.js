@@ -63,6 +63,7 @@ describe("Controller Methods", () => {
     } catch (err) {
       ret = err;
     } finally {
+      // 没法测试
       expect(200).toBe(200)
     }
   });
