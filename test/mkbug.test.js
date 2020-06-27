@@ -1,5 +1,5 @@
 const axios = require('axios');
-
+XMLHttpRequest = undefined
 describe("Mkbug", () => {
   it("初始化Express实例", async () => {
     const ret = await axios.get('http://localhost:3000');
