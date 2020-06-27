@@ -1,4 +1,4 @@
-require('./bin/init');
+require('./bin/express.init');
 
 exports.Mkbug = require('./bin/mkbug');
 exports.BaseController = require('./bin/base.controller');;
