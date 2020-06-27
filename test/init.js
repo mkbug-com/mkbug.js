@@ -7,7 +7,7 @@ new Mkbug(express(), {
   path: './example'
 })
 .use('/error', (req, res, next) => {
-  next(new Error('test error'))
+  next('test error')
 })
 .use('/heath', (req, res) => {
   res.status(200).end()
@@ -27,7 +27,6 @@ new Mkbug(express(), {
 })
 .use((err, req, res) => {
   if (err) {
-    console.log(err)
     res.status(500).end('Server has exception!')
   }
 })

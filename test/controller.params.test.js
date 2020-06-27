@@ -1,6 +1,6 @@
 const request = require('superagent');
 
-describe("Controller Params", () => {
+describe("Controller URL传参 测试", () => {
   it("Controller文件名定义param取值", async () => {
     let ret = null;
     try {

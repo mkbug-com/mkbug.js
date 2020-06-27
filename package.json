@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "init": "npm i express chalk jest superagent",
-    "test": "node test/init.js & jest && curl http://localhost:3000/close",
+    "test": "(nohup node test/init.js &) && jest && curl http://localhost:3000/close",
     "jest": "jest"
   },
   "repository": {

@@ -3,7 +3,6 @@ const Config = require('../bin/base.config');
 describe("Config", () => {
   it("初始化 默认路径", () => {
     const case1 = new Config('case1');
-    console.log(case1)
     expect(case1).toEqual({})
   });
 
