@@ -1,6 +1,5 @@
 const express = require('express');
 const Stream = require('stream');
-const chalk = require('chalk');
 
 const { METHODS } = require('./const');
 const {
@@ -8,10 +7,9 @@ const {
   getMethod,
   createContext,
   INFO,
-  WARN,
-  ERROR
+  WARN
 } = require('./utils');
-
+const MkbugError = require('./base.mkbugerror');
 
 const router = express.Router();
 
@@ -52,25 +50,29 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
           }
           
           let data = null;
+          let result = null;
 
-          const before = controller.before.call(ctx, req, res, next);
-          let beforeRet = null;
-          if (isPromise(before)) {
-            beforeRet = await before;
-          } else {
-            beforeRet = before
-          }
-
-          if (beforeRet === true) {
+          try {
+            controller.before.call(ctx, req, res, next);
             data = controller[method].call(ctx, req, res, next);
-  
-            let result = null;
+
             if (isPromise(data)) {
               result = await data;
             } else {
               result = data
             }
-
+          } catch (e) {
+            if (!res.finished && e instanceof MkbugError) {
+              ctx.status = e.status;
+              result = e.body;
+            } else {
+              ctx.status = 500;
+              result = {
+                name: 'MkbugError',
+                msg: `Reject by ${thie.name}!`
+              }
+            }
+          } finally {
             if (!res.finished) {
               ctx.type && res.type(ctx.type);
               res.status(ctx.status);
@@ -81,12 +83,6 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
               } else {
                 res.json(result);
               }
-            }
-          } else {
-            if (!res.finished) {
-              ctx.type && res.type(ctx.type);
-              res.status(405);
-              res.end('Method not allowed');
             }
           }
         })
