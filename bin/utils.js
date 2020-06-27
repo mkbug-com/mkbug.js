@@ -46,16 +46,16 @@ module.exports = {
 
     return ctx;
   },
-  LOG (msg) {
-    isTest && console.log('Mkbug.js[LOG  ]:', msg);
+  LOG (msg, ...other) {
+    isTest && console.log(chalk.bgBlack('Mkbug.js [ LOG ]:'), msg, ...other);
   },
-  INFO (msg) {
-    isTest && console.info(chalk.yellow('Mkbug.js[INFO ]:'), chalk.yellow(msg));
+  INFO (msg, ...other) {
+    isTest && console.info(chalk.yellow('Mkbug.js [ INFO]:'), chalk.yellow(msg), ...other);
   },
-  WARN (msg) {
-    isTest && console.warn(chalk.magenta('Mkbug.js[WARN ]:'), chalk.magenta(msg));
+  WARN (msg, ...other) {
+    isTest && console.warn(chalk.magenta('Mkbug.js [ WARN]:'), chalk.magenta(msg), ...other);
   },
-  ERROR (msg) {
-    isTest && console.error(chalk.red('Mkbug.js[ERROR]:'), chalk.red(msg));
+  ERROR (msg, ...other) {
+    isTest && console.error(chalk.red('Mkbug.js [ERROR]:'), chalk.red(msg), ...other);
   }
 }

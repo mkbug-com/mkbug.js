@@ -1,3 +1,7 @@
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = 'DEBUG';
+}
+
 require('./bin/express.init');
 
 exports.Mkbug = require('./bin/mkbug');

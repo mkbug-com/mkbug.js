@@ -2,11 +2,12 @@ const path = require('path');
 const chalk = require('chalk');
 
 const { createModule } = require('./helper');
+const { LOG, INFO, WARN, ERROR } = require('./utils');
 const BaseConfig = require('./base.config');
 
 module.exports = class Mkbug {
   constructor (app, opts = {}) {
-    console.info(chalk.green('Mkbug.js[INFO]:'), chalk.yellow(`Welcome to Mkbug.js (NODE_ENV = ${process.env.NODE_ENV || ''})\n`));
+    LOG(`Welcome to Mkbug.js (NODE_ENV = ${process.env.NODE_ENV || ''})\n`);
 
     this.app = app;
     this.basePath = path.resolve(process.cwd(), opts.path) || path.resolve(process.cwd(), 'src');
@@ -32,9 +33,9 @@ module.exports = class Mkbug {
     this.app.use(prePath, createModule(this.basePath, prePath));
     this.app.listen(port, cb || function callback (err) {
       if (err) {
-        console.error(chalk.bgRed(`Mkbug.js[ERROR]: Start with [PORT=${port}]\n`), err);
+        ERROR(`Failed with [PORT=${port}]`, err);
       } else {
-        console.info(chalk.bgGreen(`Mkbug.js[INFO]: Start with [PORT=${port}]\n`));
+        INFO(`Start with [PORT=${port}]`);
       }
     });
     return this.app;
