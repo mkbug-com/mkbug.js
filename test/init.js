@@ -6,6 +6,9 @@ new Mkbug(express(), {
   path: './example'
 })
 .create('/api')
+.use('/error', (req, res, next) => {
+  next(new Error('test error'))
+})
 .use('/heath', (req, res) => {
   res.status(200).end()
 })
