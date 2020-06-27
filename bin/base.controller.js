@@ -1,9 +1,9 @@
 const chalk = require('chalk');
 
-const { _get } = require('./utils');
+const { _get, INFO } = require('./utils');
 const Base = require('./base');
 
-module.exports = class BaseController extends Base {
+class BaseController extends Base {
   constructor() {
     super();
   }
@@ -17,19 +17,21 @@ module.exports = class BaseController extends Base {
   }
 
   after ({ duration, status, originalUrl, request, response }) {
-    console.info(chalk.yellow(`Mkbug.js[INFO]: `), `${duration}ms [${status}][${request.method}]${originalUrl}`);
-  }
-
-  __$$getMethods () {
-    const props = Object.getOwnPropertyNames(this.__proto__);
-    return props.filter((prop) => {
-      if (prop !== "constructor" &&
-        typeof this[prop] === "function" &&
-        prop.endsWith('Action')) {
-        return true;
-      } else {
-        return false;
-      }
-    });
+    INFO(`${duration}ms [${status}][${request.method}]${originalUrl}`);
   }
 }
+
+BaseController.prototype.__$$getMethods = function () {
+  const props = Object.getOwnPropertyNames(this.__proto__);
+  return props.filter((prop) => {
+    if (prop !== "constructor" &&
+      typeof this[prop] === "function" &&
+      prop.endsWith('Action')) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+}
+
+module.exports = BaseController;

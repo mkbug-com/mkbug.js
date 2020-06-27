@@ -8,7 +8,12 @@ const BaseLogic = require('./base.logic');
 const BaseModel = require('./base.model');
 const BasePlugin = require('./base.plugin');
 const BaseUtil = require('./base.util');
-const { createContext } = require('./utils');
+const {
+  createContext,
+  INFO,
+  WARN,
+  ERROR
+} = require('./utils');
 
 let baseDir = '';
 
@@ -21,7 +26,7 @@ function doParse (modules, prefix) {
 
   const router = express.Router();
 
-  console.info(chalk.yellow('==========Mkbug utils inject start==========='));
+  INFO('==========Mkbug utils inject start===========');
   const { utils, plugins } = parseUtil(path.resolve(baseDir, 'plugin'));
   const createplugin = (plugin) => {
     return (res, req, next) => {
@@ -32,24 +37,24 @@ function doParse (modules, prefix) {
   plugins.forEach((plugin) => {
     router.use(createplugin(plugin))
   })
-  console.info(chalk.yellow('==========Mkbug utils inject end=============\n'));
+  INFO('==========Mkbug utils inject end=============\n');
 
-  console.info(chalk.yellow('==========Mkbug model inject start==========='));
+  INFO('==========Mkbug model inject start===========');
   BaseModel.prototype.Utils = utils
   const models = parseModel(path.resolve(baseDir, Model), '');
-  console.info(chalk.yellow('==========Mkbug model inject end=============\n'));
+  INFO('==========Mkbug model inject end=============\n');
 
-  console.info(chalk.yellow('==========Mkbug logic inject start==========='));
+  INFO('==========Mkbug logic inject start===========');
   BaseLogic.prototype.Models = models
   BaseLogic.prototype.Utils = utils
   const logics = parseLogic(path.resolve(baseDir, Logic), '');
-  console.info(chalk.yellow('==========Mkbug logic inject end=============\n'));
+  INFO('==========Mkbug logic inject end=============\n');
   
-  console.info(chalk.yellow('==========Mkbug controller mapping start=========='));
+  INFO('==========Mkbug controller mapping start==========');
   BaseController.prototype.Logics = logics
   BaseController.prototype.Utils = utils
   parseController(router, path.resolve(baseDir, Controller), { prefix });
-  console.info(chalk.yellow('==========Mkbug controller mapping end============'));
+  INFO('==========Mkbug controller mapping end============\n');
 
   return router;
 }
@@ -80,11 +85,10 @@ function parseController (router, dir, { pre = '/', prefix }) {
           if (control instanceof BaseController) {
             router.attch(subPath, control, needParams, prefix);
           } else {
-            console.warn(chalk.magenta('Mkbug.js[WARN]:'),
-              chalk.bgMagenta(`Controller ${file} must extends from BaseController or will be ignored!`));
+            WARN(`Controller ${file} must extends from BaseController or will be ignored!`);
           }
         } else {
-          console.warn(chalk.magenta('Mkbug.js[WARN]:'), chalk.bgMagenta(`${file} will be ignored!`));
+          WARN(`${file} will be ignored!`);
         }
       } else if (stat.isDirectory()) {
         if (!file.startsWith('_')) {
@@ -94,7 +98,7 @@ function parseController (router, dir, { pre = '/', prefix }) {
       }
     });
   } catch (e) {
-    console.error(chalk.red('Mkbug.js[ERROR]:', e));
+    ERROR(e);
   }
 }
 
@@ -114,24 +118,21 @@ function parseLogic (dir, parent = '') {
         if (typeof Logic === 'function' && Logic.constructor) {
           const logic = new Logic();
           if (logic instanceof BaseLogic) {
-            console.info(chalk.yellow('Mkbug.js[INFO]:'), 
-              `Inject Logic = ${parent !== '' ? parent + '.' : parent}${logic.__$$getName()}`);
+            INFO(`Inject Logic = ${parent !== '' ? parent + '.' : parent}${logic.__$$getName()}`);
             if (logics[logic.__$$getName()]) {
               logics[logic.__$$getName()].__proto__ = logic;
             } else {
               logics[logic.__$$getName()] = logic;
             }
           } else {
-            console.warn(chalk.magenta('Mkbug.js[WARN]:'),
-              chalk.bgMagenta(`Logic ${file} must extends from BaseLogic or will be ignored!`));
+            WARN(`Logic ${file} must extends from BaseLogic or will be ignored!`);
           }
         } else {
-          console.warn(chalk.magenta('Mkbug.js[WARN]:'), chalk.bgMagenta(`${file} will be ignored!`));
+          WARN(`${file} will be ignored!`);
         }
       } else if (stat.isDirectory()) {
         if (logics[file]) {
-          console.warn(chalk.magenta('Mkbug.js[WARN]:'),
-              chalk.bgMagenta(`Logic ${file} is existed, the same properties will be overrode!`));
+          WARN(`Logic ${file} is existed, the same properties will be overrode!`);
         }
         const subLogics = parseLogic(path.resolve(dir, file), 
           `${parent !== '' ? (parent + '.' + file) : file}`) || {};
@@ -144,7 +145,7 @@ function parseLogic (dir, parent = '') {
       }
     });
   } catch (e) {
-    console.error(chalk.red('Mkbug.js[ERROR]:', e));
+    ERROR(e);
   }
 
   return logics;
@@ -166,24 +167,21 @@ function parseModel (dir, parent = '') {
         if (typeof Model === 'function' && Model.constructor) {
           const model = new Model();
           if (model instanceof BaseModel) {
-            console.info(chalk.yellow('Mkbug.js[INFO]:'), 
-              `Inject model = ${parent !== '' ? parent + '.' : parent}${model.__$$getName()}`);
+            INFO(`Inject model = ${parent !== '' ? parent + '.' : parent}${model.__$$getName()}`);
             if (models[model.__$$getName()]) {
               models[model.__$$getName()].__proto__ = model;
             } else {
               models[model.__$$getName()] = model;
             }
           } else {
-            console.warn(chalk.magenta('Mkbug.js[WARN]:'),
-              chalk.bgMagenta(`Model ${file} must extends from BaseModel or will be ignored!`));
+            WARN(`Model ${file} must extends from BaseModel or will be ignored!`);
           }
         } else {
-          console.warn(chalk.magenta('Mkbug.js[WARN]:'), chalk.bgMagenta(`${file} will be ignored!`));
+          WARN(`${file} will be ignored!`);
         }
       } else if (stat.isDirectory()) {
         if (models[file]) {
-          console.warn(chalk.magenta('Mkbug.js[WARN]:'),
-              chalk.bgMagenta(`Model ${file} is existed, the same properties will be overrode!`));
+          WARN(`Model ${file} is existed, the same properties will be overrode!`);
         }
         const subModel = parseModel(path.resolve(dir, file),
           `${parent !== '' ? (parent + '.' + file) : file}`) || {};
@@ -196,7 +194,7 @@ function parseModel (dir, parent = '') {
       }
     });
   } catch (e) {
-    console.error(chalk.red('Mkbug.js[ERROR]:', e));
+    ERROR(e);
   }
 
   return models;
@@ -222,28 +220,24 @@ function parseUtil (dir, parent = '') {
         if (typeof Plugin === 'function' && Plugin.constructor) {
           const plugin = new Plugin();
           if (plugin instanceof BaseUtil) {
-            console.info(chalk.yellow('Mkbug.js[INFO]:'), 
-              `Inject util = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
+            INFO(`Inject util = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
             if (utils[plugin.__$$getName()]) {
               utils[plugin.__$$getName()].__proto__ = plugin;
             } else {
               utils[plugin.__$$getName()] = plugin;
             }
           } else if (plugin instanceof BasePlugin) {
-            console.info(chalk.yellow('Mkbug.js[INFO]:'), 
-              `Inject plugin = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
-              plugins.push(plugin);
+            INFO(`Inject plugin = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
+            plugins.push(plugin);
           } else {
-            console.warn(chalk.magenta('Mkbug.js[WARN]:'),
-              chalk.bgMagenta(`Plugin ${file} must extends from BaseUtil or BasePlugin and will be ignored!`));
+            WARN(`Plugin ${file} must extends from BaseUtil or BasePlugin and will be ignored!`);
           }
         } else {
-          console.warn(chalk.magenta('Mkbug.js[WARN]:'), chalk.bgMagenta(`${file} will be ignored!`));
+          WARN(`${file} will be ignored!`);
         }
       } else if (stat.isDirectory()) {
         if (utils[file]) {
-          console.warn(chalk.magenta('Mkbug.js[WARN]:'),
-              chalk.bgMagenta(`Plugin ${file} is existed, the same properties will be overrode!`));
+          WARN(`Plugin ${file} is existed, the same properties will be overrode!`);
         }
         const subObj = parseUtil(path.resolve(dir, file), `${parent !== '' ? (parent + '.' + file) : file}`) || {};
         if (!utils[file]) {
@@ -257,7 +251,7 @@ function parseUtil (dir, parent = '') {
       }
     });
   } catch (e) {
-    console.error(chalk.red('Mkbug.js[ERROR]:', e));
+    ERROR(e);
   }
 
   return {
@@ -285,7 +279,7 @@ exports.createModule = function (path, prefix) {
 
     router.use(doParse(modules, prefix));
   } catch (e) {
-    console.error(chalk.red('Mkbug.js[ERROR]:', e));
+    ERROR(e);
   }
 
   return router;

@@ -2,7 +2,7 @@ const path = require('path');
 const chalk = require('chalk');
 
 const { createModule } = require('./helper');
-const { LOG, INFO, WARN, ERROR } = require('./utils');
+const { LOG, INFO, ERROR } = require('./utils');
 const BaseConfig = require('./base.config');
 
 module.exports = class Mkbug {
@@ -16,7 +16,11 @@ module.exports = class Mkbug {
   }
 
   create (prefix = '') {
-    this.prefix = prefix;
+    let prePath = prefix;
+    if (prefix === '/') {
+      prePath = ''
+    }
+    this.app.use(prePath, createModule(this.basePath, prePath));
     return this;
   }
 
@@ -26,11 +30,6 @@ module.exports = class Mkbug {
   }
 
   start (port, cb) {
-    let prePath = this.prefix;
-    if (this.prefix === '/') {
-      prePath = ''
-    }
-    this.app.use(prePath, createModule(this.basePath, prePath));
     this.app.listen(port, cb || function callback (err) {
       if (err) {
         ERROR(`Failed with [PORT=${port}]`, err);

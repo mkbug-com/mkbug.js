@@ -6,7 +6,6 @@ const { Mkbug } = require('./../index');
 new Mkbug(express(), {
   path: './example'
 })
-.create('/api')
 .use('/error', (req, res, next) => {
   next(new Error('test error'))
 })
@@ -22,11 +21,13 @@ new Mkbug(express(), {
   res.status(200).end('server down!')
   process.exit(0);
 })
+.create('/api')
 .use((req, res) => {
   res.status(404).end('Server has exception!')
 })
 .use((err, req, res) => {
   if (err) {
+    console.log(err)
     res.status(500).end('Server has exception!')
   }
 })

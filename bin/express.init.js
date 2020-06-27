@@ -3,7 +3,13 @@ const Stream = require('stream');
 const chalk = require('chalk');
 
 const { METHODS } = require('./const');
-const { isPromise, getMethod, createContext } = require('./utils');
+const {
+  isPromise,
+  getMethod,
+  createContext,
+  INFO,
+  WARN
+} = require('./utils');
 
 
 const router = express.Router();
@@ -25,7 +31,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
         } else {
           uri = methodName.length > 0 ? `${pre}${name.toLowerCase()}/${methodName}` : `${pre}${name.toLowerCase()}`
         }
-        console.info(chalk.yellow(`Mkbug.js[INFO]: api = [${actions[1]}]`), `${prefix}${uri}`);
+        INFO(` api = [${actions[1]}] ${prefix}${uri}`);
 
         _this[actions[1]](`${uri}`, async function (req, res, next) {
           const ctx = createContext(controller, req, res);
@@ -86,7 +92,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
         })
       }
     } else {
-      console.warn(chalk.magenta('Mkbug.js[WARN]:'), chalk.magenta(`${method} in Controller '${name}' is not right HTTP Method.\n`));
+      WARN(`${method} in Controller '${name}' is not right HTTP Method.\n`);
     }
   });
 }
