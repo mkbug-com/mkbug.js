@@ -2,6 +2,7 @@
 [![NPM quality][quality-image]][quality-url]
 [![npm download][download-image]][download-url]
 [![build status][travis-image]][travis-url]
+[![Test coverage][codecov-image]][codecov-url]
 
 [travis-image]: https://travis-ci.org/mkbug-com/mkbug.js.svg?branch=master&status=passed
 [travis-url]: https://travis-ci.org/mkbug-com/mkbug.js
@@ -11,6 +12,8 @@
 [npm-url]: https://npmjs.org/package/mkbugjs
 [quality-image]: http://npm.packagequality.com/shield/mkbugjs.svg?style=flat-square
 [quality-url]: http://packagequality.com/#?package=mkbugjs
+[codecov-image]: https://img.shields.io/codecov/c/github/mkbug-com/mkbug.js.svg?style=flat-square
+[codecov-url]: https://codecov.io/gh/mkbug-com/mkbug.js
 
 # mkbug.js
 A OOP style declare Nodejs framework base on Express.js！
