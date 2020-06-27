@@ -17,7 +17,7 @@ const {
 
 let baseDir = '';
 
-function doParse (modules, prefix) {
+function doParse(modules, prefix) {
   const {
     Controller = 'controller',
     Logic = 'logic',
@@ -49,7 +49,7 @@ function doParse (modules, prefix) {
   BaseLogic.prototype.Utils = utils
   const logics = parseLogic(path.resolve(baseDir, Logic), '');
   INFO('==========Mkbug logic inject end=============\n');
-  
+
   INFO('==========Mkbug controller mapping start==========');
   BaseController.prototype.Logics = logics
   BaseController.prototype.Utils = utils
@@ -59,200 +59,184 @@ function doParse (modules, prefix) {
   return router;
 }
 
-function parseController (router, dir, { pre = '/', prefix }) {
-  try {
-    if (!fs.existsSync(dir)) {
-      return;
+function parseController(router, dir, { pre = '/', prefix }) {
+  if (!fs.existsSync(dir)) {
+    return;
+  }
+
+  const files = fs.readdirSync(dir);
+  files.forEach(function createController(file) {
+    const stat = fs.lstatSync(`${dir}/${file}`);
+    let subPath = `${pre}`;
+    let needParams = false;
+
+    if (file.startsWith('_')) {
+      subPath += `${file}/`;
+      subPath = subPath.replace('_', ':');
+      needParams = true;
     }
 
-    const files = fs.readdirSync(dir);
-    files.forEach(function createController (file) {
-      const stat = fs.lstatSync(`${dir}/${file}`);
-      let subPath = `${pre}`;
-      let needParams = false;
-
-      if (file.startsWith('_')) {
-        subPath += `${file}/`;
-        subPath = subPath.replace('_', ':');
-        needParams = true;
-      }
-      
-      if (stat.isFile()) {
-        subPath = subPath.replace('.js', '');
-        const Controller = require(`${dir}/${file}`);
-        if (typeof Controller === 'function' && Controller.constructor) {
-          const control = new Controller();
-          if (control instanceof BaseController) {
-            router.attch(subPath, control, needParams, prefix);
-          } else {
-            WARN(`Controller ${file} must extends from BaseController or will be ignored!`);
-          }
+    if (stat.isFile()) {
+      subPath = subPath.replace('.js', '');
+      const Controller = require(`${dir}/${file}`);
+      if (typeof Controller === 'function' && Controller.constructor) {
+        const control = new Controller();
+        if (control instanceof BaseController) {
+          router.attch(subPath, control, needParams, prefix, file);
         } else {
-          WARN(`${file} will be ignored!`);
+          WARN(`Controller ${file} must extends from BaseController or will be ignored!`);
         }
-      } else if (stat.isDirectory()) {
-        if (!file.startsWith('_')) {
-          subPath += `${file}/`
-        }
-        parseController(router, path.resolve(dir, file), { pre: subPath, prefix });
+      } else {
+        WARN(`${file} will be ignored!`);
       }
-    });
-  } catch (e) {
-    ERROR(e);
-  }
+    } else if (stat.isDirectory()) {
+      if (!file.startsWith('_')) {
+        subPath += `${file}/`
+      }
+      parseController(router, path.resolve(dir, file), { pre: subPath, prefix });
+    }
+  });
 }
 
-function parseLogic (dir, parent = '') {
+function parseLogic(dir, parent = '') {
   let logics = {};
 
-  try {
-    if (!fs.existsSync(dir)) {
-      return logics;
-    }
+  if (!fs.existsSync(dir)) {
+    return logics;
+  }
 
-    const files = fs.readdirSync(dir);
-    files.forEach(function createLogic (file) {
-      const stat = fs.lstatSync(`${dir}/${file}`);
-      if (stat.isFile()) {
-        const Logic = require(`${dir}/${file}`);
-        if (typeof Logic === 'function' && Logic.constructor) {
-          const logic = new Logic();
-          if (logic instanceof BaseLogic) {
-            INFO(`Inject Logic = ${parent !== '' ? parent + '.' : parent}${logic.__$$getName()}`);
-            if (logics[logic.__$$getName()]) {
-              logics[logic.__$$getName()].__proto__ = logic;
-            } else {
-              logics[logic.__$$getName()] = logic;
-            }
+  const files = fs.readdirSync(dir);
+  files.forEach(function createLogic(file) {
+    const stat = fs.lstatSync(`${dir}/${file}`);
+    if (stat.isFile()) {
+      const Logic = require(`${dir}/${file}`);
+      if (typeof Logic === 'function' && Logic.constructor) {
+        const logic = new Logic();
+        if (logic instanceof BaseLogic) {
+          INFO(`Inject Logic = ${parent !== '' ? parent + '.' : parent}${logic.__$$getName()}`);
+          if (logics[logic.__$$getName()]) {
+            logics[logic.__$$getName()].__proto__ = logic;
           } else {
-            WARN(`Logic ${file} must extends from BaseLogic or will be ignored!`);
+            logics[logic.__$$getName()] = logic;
           }
         } else {
-          WARN(`${file} will be ignored!`);
+          WARN(`Logic ${file} must extends from BaseLogic or will be ignored!`);
         }
-      } else if (stat.isDirectory()) {
-        if (logics[file]) {
-          WARN(`Logic ${file} is existed, the same properties will be overrode!`);
-        }
-        const subLogics = parseLogic(path.resolve(dir, file), 
-          `${parent !== '' ? (parent + '.' + file) : file}`) || {};
-        if (!logics[file]) {
-          logics[file] = {}
-        }
-        Object.keys(subLogics).forEach(function injectSubLogic (sub) {
-          logics[file][sub] = subLogics[sub];
-        })
+      } else {
+        WARN(`${file} will be ignored!`);
       }
-    });
-  } catch (e) {
-    ERROR(e);
-  }
+    } else if (stat.isDirectory()) {
+      if (logics[file]) {
+        WARN(`Logic ${file} is existed, the same properties will be overrode!`);
+      }
+      const subLogics = parseLogic(path.resolve(dir, file),
+        `${parent !== '' ? (parent + '.' + file) : file}`) || {};
+      if (!logics[file]) {
+        logics[file] = {}
+      }
+      Object.keys(subLogics).forEach(function injectSubLogic(sub) {
+        logics[file][sub] = subLogics[sub];
+      })
+    }
+  });
 
   return logics;
 }
 
-function parseModel (dir, parent = '') {
+function parseModel(dir, parent = '') {
   let models = {};
 
-  try {
-    if (!fs.existsSync(dir)) {
-      return models;
-    }
+  if (!fs.existsSync(dir)) {
+    return models;
+  }
 
-    const files = fs.readdirSync(dir);
-    files.forEach(function createModel (file) {
-      const stat = fs.lstatSync(`${dir}/${file}`);
-      if (stat.isFile()) {
-        const Model = require(`${dir}/${file}`);
-        if (typeof Model === 'function' && Model.constructor) {
-          const model = new Model();
-          if (model instanceof BaseModel) {
-            INFO(`Inject model = ${parent !== '' ? parent + '.' : parent}${model.__$$getName()}`);
-            if (models[model.__$$getName()]) {
-              models[model.__$$getName()].__proto__ = model;
-            } else {
-              models[model.__$$getName()] = model;
-            }
+  const files = fs.readdirSync(dir);
+  files.forEach(function createModel(file) {
+    const stat = fs.lstatSync(`${dir}/${file}`);
+    if (stat.isFile()) {
+      const Model = require(`${dir}/${file}`);
+      if (typeof Model === 'function' && Model.constructor) {
+        const model = new Model();
+        if (model instanceof BaseModel) {
+          INFO(`Inject model = ${parent !== '' ? parent + '.' : parent}${model.__$$getName()}`);
+          if (models[model.__$$getName()]) {
+            models[model.__$$getName()].__proto__ = model;
           } else {
-            WARN(`Model ${file} must extends from BaseModel or will be ignored!`);
+            models[model.__$$getName()] = model;
           }
         } else {
-          WARN(`${file} will be ignored!`);
+          WARN(`Model ${file} must extends from BaseModel or will be ignored!`);
         }
-      } else if (stat.isDirectory()) {
-        if (models[file]) {
-          WARN(`Model ${file} is existed, the same properties will be overrode!`);
-        }
-        const subModel = parseModel(path.resolve(dir, file),
-          `${parent !== '' ? (parent + '.' + file) : file}`) || {};
-        if (!models[file]) {
-          models[file] = {}
-        }
-        Object.keys(subModel).forEach(function injectSubModel (sub) {
-          models[file][sub] = subModel[sub];
-        })
+      } else {
+        WARN(`${file} will be ignored!`);
       }
-    });
-  } catch (e) {
-    ERROR(e);
-  }
+    } else if (stat.isDirectory()) {
+      if (models[file]) {
+        WARN(`Model ${file} is existed, the same properties will be overrode!`);
+      }
+      const subModel = parseModel(path.resolve(dir, file),
+        `${parent !== '' ? (parent + '.' + file) : file}`) || {};
+      if (!models[file]) {
+        models[file] = {}
+      }
+      Object.keys(subModel).forEach(function injectSubModel(sub) {
+        models[file][sub] = subModel[sub];
+      })
+    }
+  });
 
   return models;
 }
 
-function parseUtil (dir, parent = '') {
+function parseUtil(dir, parent = '') {
   let utils = {};
   let plugins = [];
 
-  try {
-    if (!fs.existsSync(dir)) {
-      return {
-        utils,
-        plugins
-      };
-    }
-
-    const files = fs.readdirSync(dir);
-    files.forEach(function createUtil (file) {
-      const stat = fs.lstatSync(`${dir}/${file}`);
-      if (stat.isFile()) {
-        const Plugin = require(`${dir}/${file}`);
-        if (typeof Plugin === 'function' && Plugin.constructor) {
-          const plugin = new Plugin();
-          if (plugin instanceof BaseUtil) {
-            INFO(`Inject util = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
-            if (utils[plugin.__$$getName()]) {
-              utils[plugin.__$$getName()].__proto__ = plugin;
-            } else {
-              utils[plugin.__$$getName()] = plugin;
-            }
-          } else if (plugin instanceof BasePlugin) {
-            INFO(`Inject plugin = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
-            plugins.push(plugin);
-          } else {
-            WARN(`Plugin ${file} must extends from BaseUtil or BasePlugin and will be ignored!`);
-          }
-        } else {
-          WARN(`${file} will be ignored!`);
-        }
-      } else if (stat.isDirectory()) {
-        if (utils[file]) {
-          WARN(`Plugin ${file} is existed, the same properties will be overrode!`);
-        }
-        const subObj = parseUtil(path.resolve(dir, file), `${parent !== '' ? (parent + '.' + file) : file}`) || {};
-        if (!utils[file]) {
-          utils[file] = {};
-        }
-        Object.keys(subObj.utils).forEach(function injectSubUtil (sub) {
-          utils[file][sub] = subObj.utils[sub];
-        })
-
-        plugins.push(...subObj.plugins);
-      }
-    });
-  } catch (e) {
-    ERROR(e);
+  if (!fs.existsSync(dir)) {
+    return {
+      utils,
+      plugins
+    };
   }
+
+  const files = fs.readdirSync(dir);
+  files.forEach(function createUtil(file) {
+    const stat = fs.lstatSync(`${dir}/${file}`);
+    if (stat.isFile()) {
+      const Plugin = require(`${dir}/${file}`);
+      if (typeof Plugin === 'function' && Plugin.constructor) {
+        const plugin = new Plugin();
+        if (plugin instanceof BaseUtil) {
+          INFO(`Inject util = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
+          if (utils[plugin.__$$getName()]) {
+            utils[plugin.__$$getName()].__proto__ = plugin;
+          } else {
+            utils[plugin.__$$getName()] = plugin;
+          }
+        } else if (plugin instanceof BasePlugin) {
+          INFO(`Inject plugin = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
+          plugins.push(plugin);
+        } else {
+          WARN(`Plugin ${file} must extends from BaseUtil or BasePlugin and will be ignored!`);
+        }
+      } else {
+        WARN(`${file} will be ignored!`);
+      }
+    } else if (stat.isDirectory()) {
+      if (utils[file]) {
+        WARN(`Plugin ${file} is existed, the same properties will be overrode!`);
+      }
+      const subObj = parseUtil(path.resolve(dir, file), `${parent !== '' ? (parent + '.' + file) : file}`) || {};
+      if (!utils[file]) {
+        utils[file] = {};
+      }
+      Object.keys(subObj.utils).forEach(function injectSubUtil(sub) {
+        utils[file][sub] = subObj.utils[sub];
+      })
+
+      plugins.push(...subObj.plugins);
+    }
+  });
 
   return {
     utils,
@@ -268,7 +252,7 @@ exports.createModule = function (path, prefix) {
     const files = fs.readdirSync(path);
     const modules = {};
 
-    files.forEach(function modulesParse (dir) {
+    files.forEach(function modulesParse(dir) {
       const stat = fs.lstatSync(`${path}/${dir}`);
       if (stat.isDirectory()) {
         const firstC = dir.substring(0, 1).toUpperCase();
@@ -279,7 +263,7 @@ exports.createModule = function (path, prefix) {
 
     router.use(doParse(modules, prefix));
   } catch (e) {
-    ERROR(e);
+    throw e;
   }
 
   return router;

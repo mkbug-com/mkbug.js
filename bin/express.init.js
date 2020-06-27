@@ -8,30 +8,37 @@ const {
   getMethod,
   createContext,
   INFO,
-  WARN
+  WARN,
+  ERROR
 } = require('./utils');
 
 
 const router = express.Router();
 
-router.__proto__.attch = function (pre, controller, needParams, prefix) {
+router.__proto__.attch = function (pre, controller, needParams, prefix, file) {
   const name = controller.__$$getName();
   const methods = controller.__$$getMethods();
   const _this = this;
 
-  methods.forEach(function createApi (method) {
+  function createApi (method) {
     const actions = getMethod(method);
     if (actions !== null) {
-      const methodName = `${actions[2] === '' ? '' : actions[2].toLowerCase()}`
+      const methodName = `${actions[2] === '' ? '' : actions[2].toLowerCase()}`;
       if (METHODS.indexOf(actions[1]) > -1) {
         let uri = '';
-
         if (needParams) {
-          uri = methodName.length > 0 ? `${pre}${methodName}` : `${pre.substring(0, pre.length - 1)}`
+          uri = methodName.length > 0 ? `${pre}${methodName}` : `${pre.substring(0, pre.length - 1)}`;
         } else {
-          uri = methodName.length > 0 ? `${pre}${name.toLowerCase()}/${methodName}` : `${pre}${name.toLowerCase()}`
+          const className = name;
+          const fileName = file;
+          if (className !== fileName) {
+            ERROR('The name of Controller must be the same as Class name!');
+            throw new Error('The name of Controller must be the same as Class name!');
+          } else {
+            uri = methodName.length > 0 ? `${pre}${name.toLowerCase()}/${methodName}` : `${pre}${name.toLowerCase()}`;
+          }
         }
-        INFO(` api = [${actions[1]}] ${prefix}${uri}`);
+        INFO(`api = [${actions[1]}] ${prefix}${uri}`);
 
         _this[actions[1]](`${uri}`, async function (req, res, next) {
           const ctx = createContext(controller, req, res);
@@ -94,5 +101,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
     } else {
       WARN(`${method} in Controller '${name}' is not right HTTP Method.\n`);
     }
-  });
+  }
+
+  methods.forEach(createApi);
 }
