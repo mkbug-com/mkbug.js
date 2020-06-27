@@ -23,14 +23,14 @@ function doParse (modules, prefix) {
 
   console.info(chalk.yellow('==========Mkbug utils inject start==========='));
   const { utils, plugins } = parseUtil(path.resolve(baseDir, 'plugin'));
-  const createMiddleware = (plugin) => {
+  const createplugin = (plugin) => {
     return (res, req, next) => {
       const ctx = createContext(plugin, res, req);
       plugin.run.call(ctx, res, req, next);
     }
   }
   plugins.forEach((plugin) => {
-    router.use(createMiddleware(plugin))
+    router.use(createplugin(plugin))
   })
   console.info(chalk.yellow('==========Mkbug utils inject end=============\n'));
 
@@ -231,7 +231,7 @@ function parseUtil (dir, parent = '') {
             }
           } else if (plugin instanceof BasePlugin) {
             console.info(chalk.yellow('Mkbug.js[INFO]:'), 
-              `Inject middleware = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
+              `Inject plugin = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
               plugins.push(plugin);
           } else {
             console.warn(chalk.magenta('Mkbug.js[WARN]:'),

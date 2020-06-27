@@ -19,8 +19,8 @@ module.exports = class Mkbug {
     return this;
   }
 
-  use (middleWare) {
-    this.app.use(middleWare);
+  use (plugin) {
+    this.app.use(plugin);
     return this;
   }
 
