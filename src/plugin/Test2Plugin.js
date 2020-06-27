@@ -1,6 +1,6 @@
-const { BaseMiddleware } = require('./../../index');
+const { BasePlugin } = require('./../../index');
 
-module.exports = class Test1Middleware extends BaseMiddleware {
+module.exports = class Test1Middleware extends BasePlugin {
   constructor() {
     super();
 

@@ -1,6 +1,6 @@
-const { BaseMiddleware, MkbugError } = require('./../../index');
+const { BasePlugin, MkbugError } = require('./../../index');
 
-module.exports = class TestMiddleware extends BaseMiddleware {
+module.exports = class TestMiddleware extends BasePlugin {
   constructor() {
     super();
 

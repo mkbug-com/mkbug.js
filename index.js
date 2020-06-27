@@ -11,7 +11,7 @@ const BaseController = require('./bin/base.controller');
 const BaseLogic = require('./bin/base.logic');
 const BaseModel = require('./bin/base.model');
 const BaseConfig = require('./bin/base.config');
-const { BaseMiddleware, BaseUtil, MkbugError } = require('./bin/base.plugin');
+const { BasePlugin, BaseUtil, MkbugError } = require('./bin/base.plugin');
 
 const router = express.Router();
 
@@ -113,8 +113,8 @@ exports.Mkbug = class Mkbug {
     return this;
   }
 
-  use (middleWare) {
-    this.app.use(middleWare);
+  use (plugin) {
+    this.app.use(plugin);
     return this;
   }
 
@@ -138,6 +138,6 @@ exports.BaseController = BaseController;
 exports.BaseLogic = BaseLogic;
 exports.BaseModel = BaseModel;
 exports.Config = BaseConfig;
-exports.BaseMiddleware = BaseMiddleware;
+exports.BasePlugin = BasePlugin;
 exports.BaseUtil = BaseUtil;
 exports.MkbugError = MkbugError;

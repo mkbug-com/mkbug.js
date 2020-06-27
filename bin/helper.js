@@ -6,7 +6,7 @@ const chalk = require('chalk');
 const BaseController = require('./base.controller');
 const BaseLogic = require('./base.logic');
 const BaseModel = require('./base.model');
-const { BaseUtil, BaseMiddleware } = require('./base.plugin');
+const { BaseUtil, BasePlugin } = require('./base.plugin');
 const { createContext } = require('./utils');
 
 let baseDir = '';
@@ -22,14 +22,14 @@ function doParse (modules, prefix) {
 
   console.info(chalk.yellow('==========Mkbug utils inject start==========='));
   const { utils, plugins } = parseUtil(path.resolve(baseDir, 'plugin'));
-  const createMiddleware = (plugin) => {
+  const createplugin = (plugin) => {
     return (res, req, next) => {
       const ctx = createContext(plugin, res, req);
       plugin.run.call(ctx, res, req, next);
     }
   }
   plugins.forEach((plugin) => {
-    router.use(createMiddleware(plugin))
+    router.use(createplugin(plugin))
   })
   console.info(chalk.yellow('==========Mkbug utils inject end=============\n'));
 
@@ -228,13 +228,13 @@ function parseUtil (dir, parent = '') {
             } else {
               utils[plugin.__$$getName()] = plugin;
             }
-          } else if (plugin instanceof BaseMiddleware) {
+          } else if (plugin instanceof BasePlugin) {
             console.info(chalk.yellow('Mkbug.js[INFO]:'), 
-              `Inject middleware = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
+              `Inject plugin = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
               plugins.push(plugin);
           } else {
             console.warn(chalk.magenta('Mkbug.js[WARN]:'),
-              chalk.bgMagenta(`Plugin ${file} must extends from BaseUtil or BaseMiddleware and will be ignored!`));
+              chalk.bgMagenta(`Plugin ${file} must extends from BaseUtil or BasePlugin and will be ignored!`));
           }
         } else {
           console.warn(chalk.magenta('Mkbug.js[WARN]:'), chalk.bgMagenta(`${file} will be ignored!`));
