@@ -10,7 +10,8 @@ const BaseUtil = require('./base.util');
 const {
   createContext,
   INFO,
-  WARN
+  WARN,
+  ERROR
 } = require('./utils');
 
 let baseDir = '';
@@ -79,8 +80,16 @@ function parseController(router, dir, { pre = '/', prefix }) {
       const Controller = require(`${dir}/${file}`);
       if (typeof Controller === 'function' && Controller.constructor) {
         const control = new Controller();
+
+        const className = control.__$$getName();
+        const fileName = file.replace('.js', '');
+        if (!needParams && className !== fileName) {
+          ERROR(`The name of file ${file} must be the same as Class name ${className}!`);
+          throw new Error('The name of file must be the same as Class name!');
+        }
+
         if (control instanceof BaseController) {
-          router.attch(subPath, control, needParams, prefix, file.replace('.js', ''));
+          router.attch(subPath, control, needParams, prefix);
         } else {
           WARN(`Controller ${file} must extends from BaseController or will be ignored!`);
         }
@@ -110,12 +119,20 @@ function parseLogic(dir, parent = '') {
       const Logic = require(`${dir}/${file}`);
       if (typeof Logic === 'function' && Logic.constructor) {
         const logic = new Logic();
+
+        const className = logic.__$$getName();
+        const fileName = file.replace('.js', '');
+        if (className !== fileName) {
+          ERROR(`The name of file ${file} must be the same as Class name ${className}!`);
+          throw new Error('The name of file must be the same as Class name!');
+        }
+
         if (logic instanceof BaseLogic) {
-          INFO(`Inject Logic = ${parent !== '' ? parent + '.' : parent}${logic.__$$getName()}`);
-          if (logics[logic.__$$getName()]) {
-            logics[logic.__$$getName()].__proto__ = logic;
+          INFO(`Inject Logic = ${parent !== '' ? parent + '.' : parent}${className}`);
+          if (logics[className]) {
+            logics[className].__proto__ = logic;
           } else {
-            logics[logic.__$$getName()] = logic;
+            logics[className] = logic;
           }
         } else {
           WARN(`Logic ${file} must extends from BaseLogic or will be ignored!`);
@@ -155,12 +172,20 @@ function parseModel(dir, parent = '') {
       const Model = require(`${dir}/${file}`);
       if (typeof Model === 'function' && Model.constructor) {
         const model = new Model();
+
+        const className = model.__$$getName();
+        const fileName = file.replace('.js', '');
+        if (className !== fileName) {
+          ERROR(`The name of file ${file} must be the same as Class name ${className}!`);
+          throw new Error('The name of file must be the same as Class name!');
+        }
+
         if (model instanceof BaseModel) {
-          INFO(`Inject model = ${parent !== '' ? parent + '.' : parent}${model.__$$getName()}`);
-          if (models[model.__$$getName()]) {
-            models[model.__$$getName()].__proto__ = model;
+          INFO(`Inject model = ${parent !== '' ? parent + '.' : parent}${className}`);
+          if (models[className]) {
+            models[className].__proto__ = model;
           } else {
-            models[model.__$$getName()] = model;
+            models[className] = model;
           }
         } else {
           WARN(`Model ${file} must extends from BaseModel or will be ignored!`);
@@ -202,8 +227,16 @@ function parseUtil(dir, parent = '') {
     const stat = fs.lstatSync(`${dir}/${file}`);
     if (stat.isFile()) {
       const Plugin = require(`${dir}/${file}`);
-      if (typeof Plugin === 'function' && Plugin.constructor) {
+      if (typeof Plugin === 'function' && Plugin.constructor) {        
         const plugin = new Plugin();
+
+        const className = plugin.__$$getName();
+        const fileName = file.replace('.js', '');
+        if (className !== fileName) {
+          ERROR(`The name of file ${file} must be the same as Class name ${className}!`);
+          throw new Error('The name of file must be the same as Class name!');
+        }
+
         if (plugin instanceof BaseUtil) {
           INFO(`Inject util = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
           if (utils[plugin.__$$getName()]) {

@@ -15,7 +15,7 @@ const {
 
 const router = express.Router();
 
-router.__proto__.attch = function (pre, controller, needParams, prefix, file) {
+router.__proto__.attch = function (pre, controller, needParams, prefix) {
   const name = controller.__$$getName();
   const methods = controller.__$$getMethods();
   const _this = this;
@@ -29,14 +29,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix, file) {
         if (needParams) {
           uri = methodName.length > 0 ? `${pre}${methodName}` : `${pre.substring(0, pre.length - 1)}`;
         } else {
-          const className = name;
-          const fileName = file;
-          if (className !== fileName) {
-            ERROR('The name of Controller must be the same as Class name!');
-            throw new Error('The name of Controller must be the same as Class name!');
-          } else {
-            uri = methodName.length > 0 ? `${pre}${name.toLowerCase()}/${methodName}` : `${pre}${name.toLowerCase()}`;
-          }
+          uri = methodName.length > 0 ? `${pre}${name.toLowerCase()}/${methodName}` : `${pre}${name.toLowerCase()}`;
         }
         INFO(`api = [${actions[1]}] ${prefix}${uri}`);
 
