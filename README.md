@@ -1,3 +1,6 @@
+[![Windows Build][appveyor-image]][appveyor-url]
+[![Test Coverage][coveralls-image]][coveralls-url]
+
 Mkbug.js[![npm downloads](https://img.shields.io/npm/dm/mkbugjs.svg?style=flat-square)](http://npm-stat.com/charts.html?package=mkbugjs)
 Egg.js[![npm downloads](https://img.shields.io/npm/dm/egg.svg?style=flat-square)](http://npm-stat.com/charts.html?package=egg)
 Thinkjs[![npm downloads](https://img.shields.io/npm/dm/thinkjs.svg?style=flat-square)](http://npm-stat.com/charts.html?package=thinkjs)
