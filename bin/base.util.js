@@ -1,3 +1,3 @@
-exports.BaseUtil = class BaseUtil {
-
+module.exports = class BaseUtil {
+  
 };

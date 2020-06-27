@@ -1,7 +1,6 @@
 const express = require("express");
 const path = require('path');
 const fs = require('fs');
-const chalk = require('chalk');
 
 const BaseController = require('./base.controller');
 const BaseLogic = require('./base.logic');
@@ -11,8 +10,7 @@ const BaseUtil = require('./base.util');
 const {
   createContext,
   INFO,
-  WARN,
-  ERROR
+  WARN
 } = require('./utils');
 
 let baseDir = '';
