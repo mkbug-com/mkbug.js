@@ -36,8 +36,4 @@ module.exports = class Index extends BaseController {
   traceTestAction () {
     return 'traceTestAction';
   }
-
-  warnTestAction () {
-    return 'warnTestAction';
-  }
 }

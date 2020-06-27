@@ -99,7 +99,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix, file) {
         })
       }
     } else {
-      WARN(`${method} in Controller '${name}' is not right HTTP Method.\n`);
+      WARN(`${method} in Controller ${name} is not right HTTP Method.\n`);
     }
   }
 
