@@ -20,8 +20,8 @@ module.exports = class Mkbug {
     return this;
   }
 
-  use (plugin) {
-    this.app.use(plugin);
+  use (...plugin) {
+    this.app.use(...plugin);
     return this;
   }
 

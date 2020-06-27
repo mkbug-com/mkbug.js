@@ -6,6 +6,13 @@ new Mkbug(express(), {
   path: './example'
 })
 .create('/api')
+.use('/heath', (req, res) => {
+  res.status(200).end()
+})
+.use('/close', (req, res) => {
+  res.status(200).end('server down!')
+  process.exit(0);
+})
 .use((req, res) => {
   res.status(404).end('Server has exception!')
 })

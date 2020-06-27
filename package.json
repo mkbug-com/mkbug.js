@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "init": "npm i express chalk jest axios",
-    "test": "node test/init.js && jest"
+    "test": "node test/init.js & jest && curl http://localhost:3000/close"
   },
   "repository": {
     "type": "git",
