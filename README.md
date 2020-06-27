@@ -1,9 +1,11 @@
-[![Windows Build][appveyor-image]][appveyor-url]
-[![Test Coverage][coveralls-image]][coveralls-url]
+[![npm download][download-image]][download-url][![build status][travis-image]][travis-url]
 
-Mkbug.js[![npm downloads](https://img.shields.io/npm/dm/mkbugjs.svg?style=flat-square)](http://npm-stat.com/charts.html?package=mkbugjs)
-Egg.js[![npm downloads](https://img.shields.io/npm/dm/egg.svg?style=flat-square)](http://npm-stat.com/charts.html?package=egg)
-Thinkjs[![npm downloads](https://img.shields.io/npm/dm/thinkjs.svg?style=flat-square)](http://npm-stat.com/charts.html?package=thinkjs)
+[travis-image]: https://travis-ci.org/mkbug-com/mkbug.js.svg?branch=master&status=passed
+[travis-url]: https://travis-ci.org/mkbug-com/mkbug.js
+
+[download-image]: https://img.shields.io/npm/dm/mkbugjs.svg?style=flat-square
+[download-url]: https://npmjs.org/package/mkbugjs
+
 # mkbug.js
 A OOP style declare Nodejs framework base on Express.js！
 
