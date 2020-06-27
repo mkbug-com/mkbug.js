@@ -82,7 +82,7 @@ function parseController(router, dir, { pre = '/', prefix }) {
       if (typeof Controller === 'function' && Controller.constructor) {
         const control = new Controller();
         if (control instanceof BaseController) {
-          router.attch(subPath, control, needParams, prefix, file);
+          router.attch(subPath, control, needParams, prefix, file.replace('.js', ''));
         } else {
           WARN(`Controller ${file} must extends from BaseController or will be ignored!`);
         }

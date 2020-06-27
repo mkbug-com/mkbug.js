@@ -1,4 +1,4 @@
-const { BaseController, Config } = require('./../../index');
+const { BaseController, Config } = require('../../index');
 
 module.exports = class ConfigTest extends BaseController {
   getDefaultConfigAction () {
