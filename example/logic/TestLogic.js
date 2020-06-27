@@ -1,11 +1,11 @@
 const { BaseLogic } = require('./../../index');
 
 module.exports = class TestLogic extends BaseLogic {
-  constructor () {
-    super()
+  getMsg() {
+    return 'Mkbug.js from TestLogic'
   }
 
-  getUserName () {
-    return 'Mkbug.js from TestLogic'
+  getModelMsg () {
+    return this.Models.TestModel.getMsg();
   }
 }
