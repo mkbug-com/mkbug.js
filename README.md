@@ -2,7 +2,6 @@
 [![NPM quality][quality-image]][quality-url]
 [![npm download][download-image]][download-url]
 [![build status][travis-image]][travis-url]
-[![Test coverage][codecov-image]][codecov-url]
 
 [travis-image]: https://travis-ci.org/mkbug-com/mkbug.js.svg?branch=master&status=passed
 [travis-url]: https://travis-ci.org/mkbug-com/mkbug.js
