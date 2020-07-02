@@ -69,7 +69,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
               ctx.status = 500;
               result = {
                 name: 'MkbugError',
-                msg: `Reject by ${thie.name}!`
+                msg: `Reject by ${this.name}!`
               }
             }
           } finally {
