@@ -1,4 +1,4 @@
-const { BaseUtil } = require('./../../../index');
+const { BaseUtil } = require('../../../index');
 
 module.exports = class TestUtil extends BaseUtil {
   sayHello (name) {
