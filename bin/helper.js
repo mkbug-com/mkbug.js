@@ -26,7 +26,12 @@ function doParse(modules, prefix) {
   const router = express.Router();
 
   INFO('==========Mkbug utils inject start===========');
-  const { utils, plugins } = parseUtil(path.resolve(baseDir, 'plugin'));
+  const utils = parseUtil(path.resolve(baseDir, 'util'));
+  INFO('==========Mkbug utils inject end=============\n');
+
+  INFO('==========Mkbug plugins inject start===========');
+  BasePlugin.prototype.Utils = utils
+  const plugins = parsePlugin(path.resolve(baseDir, 'plugin'));
   const createplugin = (plugin) => {
     return (res, req, next) => {
       const ctx = createContext(plugin, res, req);
@@ -36,7 +41,7 @@ function doParse(modules, prefix) {
   plugins.forEach((plugin) => {
     router.use(createplugin(plugin))
   })
-  INFO('==========Mkbug utils inject end=============\n');
+  INFO('==========Mkbug plugins inject end=============\n');
 
   INFO('==========Mkbug model inject start===========');
   BaseModel.prototype.Utils = utils
@@ -214,15 +219,11 @@ function parseModel(dir, parent = '') {
   return models;
 }
 
-function parseUtil(dir, parent = '') {
-  let utils = {};
+function parsePlugin(dir, parent = '') {
   let plugins = [];
 
   if (!fs.existsSync(dir)) {
-    return {
-      utils,
-      plugins
-    };
+    return plugins;
   }
 
   const files = fs.readdirSync(dir);
@@ -240,14 +241,7 @@ function parseUtil(dir, parent = '') {
           throw new Error('The name of file must be the same as Class name!');
         }
 
-        if (plugin instanceof BaseUtil) {
-          INFO(`Inject util = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
-          if (utils[plugin.__$$getName()]) {
-            utils[plugin.__$$getName()].__proto__ = plugin;
-          } else {
-            utils[plugin.__$$getName()] = plugin;
-          }
-        } else if (plugin instanceof BasePlugin) {
+        if (plugin instanceof BasePlugin) {
           INFO(`Inject plugin = ${parent !== '' ? parent + '.' : parent}${plugin.__$$getName()}`);
           plugins.push(plugin);
         } else {
@@ -257,25 +251,64 @@ function parseUtil(dir, parent = '') {
         WARN(`${file} will be ignored!`);
       }
     } else if (stat.isDirectory()) {
+      const subObj = parsePlugin(path.resolve(dir, file), `${parent !== '' ? (parent + '.' + file) : file}`) || {};
+      plugins.push(...subObj);
+    }
+  });
+
+  return plugins;
+}
+
+function parseUtil(dir, parent = '') {
+  let utils = {};
+
+  if (!fs.existsSync(dir)) {
+    return utils
+  }
+
+  const files = fs.readdirSync(dir);
+  files.forEach(function createUtil(file) {
+    const stat = fs.lstatSync(`${dir}/${file}`);
+    if (stat.isFile()) {
+      const Util = require(`${dir}/${file}`);
+      if (typeof Util === 'function' && Util.constructor) {        
+        const util = new Util();
+
+        const className = util.__$$getName();
+        const fileName = file.replace('.js', '');
+        if (className !== fileName) {
+          ERROR(`The name of file ${file} must be the same as Class name ${className}!`);
+          throw new Error('The name of file must be the same as Class name!');
+        }
+
+        if (util instanceof BaseUtil) {
+          INFO(`Inject util = ${parent !== '' ? parent + '.' : parent}${util.__$$getName()}`);
+          if (utils[util.__$$getName()]) {
+            utils[util.__$$getName()].__proto__ = util;
+          } else {
+            utils[util.__$$getName()] = util;
+          }
+        } else {
+          WARN(`Util ${file} must extends from BaseUtil or BaseUtil and will be ignored!`);
+        }
+      } else {
+        WARN(`${file} will be ignored!`);
+      }
+    } else if (stat.isDirectory()) {
       if (utils[file]) {
-        WARN(`Plugin ${file} is existed, the same properties will be overrode!`);
+        WARN(`Util ${file} is existed, the same properties will be overrode!`);
       }
       const subObj = parseUtil(path.resolve(dir, file), `${parent !== '' ? (parent + '.' + file) : file}`) || {};
       if (!utils[file]) {
         utils[file] = {};
       }
-      Object.keys(subObj.utils).forEach(function injectSubUtil(sub) {
-        utils[file][sub] = subObj.utils[sub];
+      Object.keys(subObj).forEach(function injectSubUtil(sub) {
+        utils[file][sub] = subObj[sub];
       })
-
-      plugins.push(...subObj.plugins);
     }
   });
 
-  return {
-    utils,
-    plugins
-  };
+  return utils;
 }
 
 exports.createModule = function (path, prefix) {
