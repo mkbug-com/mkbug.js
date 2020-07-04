@@ -36,4 +36,16 @@ describe("Plugin", () => {
       expect(ret.response.body).toEqual({ msg: 'test json' });
     }
   });
+
+  it("Plugin生效判断 Util测试", async () => {
+    let ret = null;
+    try {
+      ret = await request.get('http://localhost:3000/api/plugintest?type=plugin4')
+    } catch (err) {
+      ret = err;
+    } finally {
+      expect(ret.status).toBe(400);
+      expect(ret.response.text).toBe('Mkbug said Hello from TestUtil.TestUtil!');
+    }
+  });
 });
