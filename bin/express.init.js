@@ -53,8 +53,8 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
           let result = null;
 
           try {
-            controller.before.call(ctx, req, res, next);
-            data = controller[method].call(ctx, req, res, next);
+            controller.before.call(ctx, req, res);
+            data = controller[method].call(ctx, req, res);
 
             if (isPromise(data)) {
               result = await data;
@@ -72,6 +72,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
                 msg: `Reject by ${this.name}!`
               }
             }
+            controller.exception.call(ctx, e, req, res);
           } finally {
             if (!res.finished) {
               ctx.type && res.type(ctx.type);
