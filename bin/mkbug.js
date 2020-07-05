@@ -1,5 +1,4 @@
 const path = require('path');
-const chalk = require('chalk');
 
 const { createModule } = require('./helper');
 const { LOG, INFO, ERROR } = require('./utils');
