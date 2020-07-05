@@ -9,7 +9,7 @@ module.exports = class Mkbug {
     LOG(`Welcome to Mkbug.js (NODE_ENV = ${process.env.NODE_ENV || ''})\n`);
 
     this.app = app;
-    this.basePath = path.resolve(process.cwd(), opts.path) || path.resolve(process.cwd(), 'src');
+    this.basePath = opts.path && path.resolve(process.cwd(), opts.path) || path.resolve(process.cwd(), 'src');
     BaseConfig.prototype.baseUrl = this.basePath;
     this.prefix = '';
   }
