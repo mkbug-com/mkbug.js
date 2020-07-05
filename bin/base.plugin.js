@@ -10,6 +10,10 @@ class BasePlugin extends Base {
   exec (req, res) {
     
   }
+
+  exception (error) {
+    
+  }
 };
 
 BasePlugin.prototype.run = async function (req, res, next) {
@@ -32,6 +36,8 @@ BasePlugin.prototype.run = async function (req, res, next) {
         msg: `Reject by ${this.name || this.constructor.name}!`
       })
     }
+
+    this.exception(e);
   }
 };
 
