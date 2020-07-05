@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 
-const { _get, INFO } = require('./utils');
+const { _get, INFO, ERROR } = require('./utils');
 const Base = require('./base');
 
 class BaseController extends Base {
@@ -18,6 +18,10 @@ class BaseController extends Base {
 
   after ({ duration, status, originalUrl, request, response }) {
     INFO(`${duration}ms [${status}][${request.method}]${originalUrl}`);
+  }
+
+  exception (error, req, res) {
+    ERROR('Controller ', error)
   }
 }
 
