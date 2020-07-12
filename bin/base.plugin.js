@@ -10,10 +10,6 @@ class BasePlugin extends Base {
   exec (req, res) {
     
   }
-
-  exception (error) {
-    
-  }
 };
 
 BasePlugin.prototype.run = async function (req, res, next) {
@@ -24,20 +20,7 @@ BasePlugin.prototype.run = async function (req, res, next) {
     }
     next();
   } catch (e) {
-    if (!res.finished && e instanceof MkbugError) {
-      if (typeof e.body === 'object') {
-        res.status(e.status).json(e.body);
-      } else {
-        res.status(e.status).end(e.body);
-      }
-    } else if (!res.finished) {
-      res.status(500).json({
-        name: 'MkbugError',
-        msg: `Reject by ${this.name || this.constructor.name}!`
-      })
-    }
-
-    this.exception(e);
+    next(e);
   }
 };
 
