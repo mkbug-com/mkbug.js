@@ -51,4 +51,4 @@ BaseConfig.prototype.__$$parseFile = function (str = '') {
   lineArr.forEach(transFunc);
 }
 
-module.exports = BaseConfig
+module.exports = BaseConfig;

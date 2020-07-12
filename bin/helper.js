@@ -60,6 +60,13 @@ function doParse(modules, prefix) {
   parseController(router, path.resolve(baseDir, Controller), { prefix });
   INFO('==========Mkbug controller mapping end============\n');
 
+  // freeze Prototype start
+  Object.freeze(BaseUtil.prototype);
+  Object.freeze(BasePlugin.prototype);
+  Object.freeze(BaseModel.prototype);
+  Object.freeze(BaseLogic.prototype);
+  Object.freeze(BaseController.prototype);
+  // end
   return router;
 }
 

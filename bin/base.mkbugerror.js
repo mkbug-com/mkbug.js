@@ -1,4 +1,4 @@
-module.exports = class MkbugError extends Error {
+class MkbugError extends Error {
   constructor(status, responseBody) {
     super()
     this.status = status || 405;
@@ -6,3 +6,7 @@ module.exports = class MkbugError extends Error {
     this.name = 'MkbugError';
   }
 };
+
+Object.freeze(MkbugError.prototype);
+
+module.exports = MkbugError;
