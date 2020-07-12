@@ -4,7 +4,7 @@ const { createModule } = require('./helper');
 const { LOG, INFO, ERROR } = require('./utils');
 const BaseConfig = require('./base.config');
 
-module.exports = class Mkbug {
+class Mkbug {
   constructor (app, opts = {}) {
     LOG(`Welcome to Mkbug.js (NODE_ENV = ${process.env.NODE_ENV || ''})\n`);
 
@@ -39,3 +39,7 @@ module.exports = class Mkbug {
     return this.app;
   }
 }
+
+Object.freeze(Mkbug.prototype);
+
+module.exports = Mkbug;
