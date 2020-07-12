@@ -11,6 +11,7 @@ class Mkbug {
     this.app = app;
     this.basePath = opts.path && path.resolve(process.cwd(), opts.path) || path.resolve(process.cwd(), 'src');
     BaseConfig.prototype.baseUrl = this.basePath;
+    Object.freeze(BaseConfig.prototype);
     this.prefix = '';
   }
 
