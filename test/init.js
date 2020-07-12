@@ -1,7 +1,7 @@
 const express = require('express');
 const cookieParser=require("cookie-parser");
 
-const { Mkbug } = require('./../index');
+const { Mkbug, MkbugError } = require('./../index');
 
 new Mkbug(express(), {
   path: './example'
@@ -22,12 +22,4 @@ new Mkbug(express(), {
   process.exit(0);
 })
 .create('/api')
-.use((req, res) => {
-  res.status(404).end('Server has exception!')
-})
-.use((err, req, res) => {
-  if (err) {
-    res.status(500).end('Server has exception!')
-  }
-})
 .start(3000);

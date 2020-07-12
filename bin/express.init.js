@@ -61,19 +61,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
             } else {
               result = data
             }
-          } catch (e) {
-            if (!res.finished && e instanceof MkbugError) {
-              ctx.status = e.status;
-              result = e.body;
-            } else {
-              ctx.status = 500;
-              result = {
-                name: 'MkbugError',
-                msg: `Reject by ${this.name}!`
-              }
-            }
-            controller.exception.call(ctx, e, req, res);
-          } finally {
+
             if (!res.finished) {
               ctx.type && res.type(ctx.type);
               res.status(ctx.status);
@@ -85,6 +73,8 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
                 res.json(result);
               }
             }
+          } catch (e) {
+            next(e);
           }
         })
       }
