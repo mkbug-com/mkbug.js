@@ -4,7 +4,6 @@ const fs = require('fs');
 
 const BaseController = require('./base.controller');
 const BaseLogic = require('./base.logic');
-const BaseModel = require('./base.model');
 const BasePlugin = require('./base.plugin');
 
 const {
@@ -19,8 +18,7 @@ let baseDir = '';
 function doParse(modules, prefix) {
   const {
     Controller = 'controller',
-    Logic = 'logic',
-    Model = 'model'
+    Logic = 'logic'
   } = modules;
 
   const router = express.Router();
@@ -38,12 +36,7 @@ function doParse(modules, prefix) {
   })
   INFO('==========Mkbug plugins inject end=============\n');
 
-  INFO('==========Mkbug model inject start===========');
-  const models = parseModel(path.resolve(baseDir, Model), '');
-  INFO('==========Mkbug model inject end=============\n');
-
   INFO('==========Mkbug logic inject start===========');
-  BaseLogic.prototype.Models = models
   const logics = parseLogic(path.resolve(baseDir, Logic), '');
   INFO('==========Mkbug logic inject end=============\n');
 
@@ -54,7 +47,6 @@ function doParse(modules, prefix) {
 
   // freeze Prototype start
   Object.freeze(BasePlugin.prototype);
-  Object.freeze(BaseModel.prototype);
   Object.freeze(BaseLogic.prototype);
   Object.freeze(BaseController.prototype);
   // end
@@ -162,59 +154,6 @@ function parseLogic(dir, parent = '') {
   });
 
   return logics;
-}
-
-function parseModel(dir, parent = '') {
-  let models = {};
-
-  if (!fs.existsSync(dir)) {
-    return models;
-  }
-
-  const files = fs.readdirSync(dir);
-  files.forEach(function createModel(file) {
-    const stat = fs.lstatSync(`${dir}/${file}`);
-    if (stat.isFile()) {
-      const Model = require(`${dir}/${file}`);
-      if (typeof Model === 'function' && Model.constructor) {
-        const model = new Model();
-
-        const className = model.__$$getName();
-        const fileName = file.replace('.js', '');
-        if (className !== fileName) {
-          ERROR(`The name of file ${file} must be the same as Class name ${className}!`);
-          throw new Error('The name of file must be the same as Class name!');
-        }
-
-        if (model instanceof BaseModel) {
-          INFO(`Inject model = ${parent !== '' ? parent + '.' : parent}${className}`);
-          if (models[className]) {
-            models[className].__proto__ = model;
-          } else {
-            models[className] = model;
-          }
-        } else {
-          WARN(`Model ${file} must extends from BaseModel or will be ignored!`);
-        }
-      } else {
-        WARN(`${file} will be ignored!`);
-      }
-    } else if (stat.isDirectory()) {
-      if (models[file]) {
-        WARN(`Model ${file} is existed, the same properties will be overrode!`);
-      }
-      const subModel = parseModel(path.resolve(dir, file),
-        `${parent !== '' ? (parent + '.' + file) : file}`) || {};
-      if (!models[file]) {
-        models[file] = {}
-      }
-      Object.keys(subModel).forEach(function injectSubModel(sub) {
-        models[file][sub] = subModel[sub];
-      })
-    }
-  });
-
-  return models;
 }
 
 function parsePlugin(dir, parent = '') {

@@ -15,7 +15,7 @@
 [codecov-url]: https://codecov.io/gh/mkbug-com/mkbug.js
 
 # mkbug.js
-A OOP style declare Nodejs framework base on Express.js！
+An OOP style declare Nodejs framework base on Express.js！
 
 [官方文档](http://doc.mkbug.com)
 
