@@ -1,7 +1,7 @@
 {
   "name": "mkbugjs",
-  "version": "1.4.0",
-  "description": "A OOP style declare Nodejs Web framework base on Express.js",
+  "version": "1.4.1",
+  "description": "An OOP style declare Nodejs Web framework base on Express.js",
   "main": "index.js",
   "scripts": {
     "init": "npm i express chalk jest superagent",

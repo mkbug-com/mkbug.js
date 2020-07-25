@@ -1,7 +1,7 @@
 const express = require('express');
 const cookieParser=require("cookie-parser");
 
-const { Mkbug, MkbugError } = require('./../index');
+const { Mkbug } = require('./../index');
 
 new Mkbug(express(), {
   path: './example'
