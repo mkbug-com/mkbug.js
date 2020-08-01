@@ -3,7 +3,6 @@ const path = require('path');
 const fs = require('fs');
 
 const BaseController = require('./base.controller');
-const BaseLogic = require('./base.logic');
 const BasePlugin = require('./base.plugin');
 
 const {
@@ -17,8 +16,7 @@ let baseDir = '';
 
 function doParse(modules, prefix) {
   const {
-    Controller = 'controller',
-    Logic = 'logic'
+    Controller = 'controller'
   } = modules;
 
   const router = express.Router();
@@ -36,18 +34,12 @@ function doParse(modules, prefix) {
   })
   INFO('==========Mkbug plugins inject end=============\n');
 
-  INFO('==========Mkbug logic inject start===========');
-  const logics = parseLogic(path.resolve(baseDir, Logic), '');
-  INFO('==========Mkbug logic inject end=============\n');
-
   INFO('==========Mkbug controller mapping start==========');
-  BaseController.prototype.Logics = logics
   parseController(router, path.resolve(baseDir, Controller), { prefix });
   INFO('==========Mkbug controller mapping end============\n');
 
   // freeze Prototype start
   Object.freeze(BasePlugin.prototype);
-  Object.freeze(BaseLogic.prototype);
   Object.freeze(BaseController.prototype);
   // end
   return router;
@@ -98,62 +90,6 @@ function parseController(router, dir, { pre = '/', prefix }) {
       parseController(router, path.resolve(dir, file), { pre: subPath, prefix });
     }
   });
-}
-
-function parseLogic(dir, parent = '') {
-  let logics = {};
-
-  if (!fs.existsSync(dir)) {
-    return logics;
-  }
-
-  const files = fs.readdirSync(dir);
-  files.forEach(function createLogic(file) {
-    const stat = fs.lstatSync(`${dir}/${file}`);
-    if (stat.isFile()) {
-      const Logic = require(`${dir}/${file}`);
-      if (typeof Logic === 'function' && Logic.constructor) {
-        const logic = new Logic();
-
-        const className = logic.__$$getName();
-        const fileName = file.replace('.js', '');
-        if (className !== fileName) {
-          ERROR(`The name of file ${file} must be the same as Class name ${className}!`);
-          throw new Error('The name of file must be the same as Class name!');
-        }
-
-        if (logic instanceof BaseLogic) {
-          INFO(`Inject Logic = ${parent !== '' ? parent + '.' : parent}${className}`);
-          if (logics[className]) {
-            logics[className].__proto__ = logic;
-          } else {
-            logics[className] = logic;
-          }
-        } else {
-          WARN(`Logic ${file} must extends from BaseLogic or will be ignored!`);
-        }
-      } else {
-        WARN(`${file} will be ignored!`);
-      }
-    } else if (stat.isDirectory()) {
-      if (logics[file]) {
-        WARN(`Logic ${file} is existed, the same properties will be overrode!`);
-      }
-      const subLogics = parseLogic(path.resolve(dir, file),
-        `${parent !== '' ? (parent + '.' + file) : file}`) || {};
-      if (!logics[file]) {
-        logics[file] = {}
-      }
-      Object.keys(subLogics).forEach(function injectSubLogic(sub) {
-        if (logics[file][sub]) {
-          WARN(`Logic ${file}.${sub} is be overrode!`);
-        }
-        logics[file][sub] = subLogics[sub];
-      })
-    }
-  });
-
-  return logics;
 }
 
 function parsePlugin(dir, parent = '') {
