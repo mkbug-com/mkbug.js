@@ -29,8 +29,6 @@ An OOP style declare Nodejs framework base on Express.js！
 | Nodejs | Nodejs 10+ | Nodejs 8+ | Nodejs 6+ |
 | 底层框架 | Express.js | Koa.js | Koa.js |
 | 路由管理 | 自动 | 手动 | 自动 |
-| 逻辑层管理 | 自动 | 无 | 无 |
-| 数据层管理 | 自动 | 无 | 无 |
 | 插件管理 | 自动 | 手动 | 手动 |
 | 中间件管理 | 手动+自动 | 手动 | 手动 |
 | 配置信息管理 | 自动 | 无 | 无 |
