@@ -43,6 +43,8 @@ module.exports = {
     ctx.params = req.params;
     ctx.status = 200;
     ctx.type = null;
+    ctx.get = req.get.bind(req);
+    ctx.set = res.set.bind(res);
 
     return ctx;
   },
