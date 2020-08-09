@@ -20,7 +20,7 @@ An OOP style declare Nodejs framework base on Express.js！
 [官方文档(中文)](http://doc.mkbug.com)
 
 # What is mkbug.js
-一款基于 Express.js 的面向对象风格声明式 Nodejs Web 框架。只需要声明并继承了对应接口的`Class`即可轻松的开发一个`Nodejs API`应用服务。
+An OOP Style Restful Api framewrok base on Express.js,and make Nodejs development beautiful and easy.
 
 ## Mkbug.js VS Egg.js VS Think.js
 
