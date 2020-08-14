@@ -9,8 +9,6 @@ const {
   INFO,
   WARN
 } = require('./utils');
-const MkbugError = require('./base.mkbugerror');
-
 const router = express.Router();
 
 router.__proto__.attch = function (pre, controller, needParams, prefix) {
@@ -18,7 +16,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
   const methods = controller.__$$getMethods();
   const _this = this;
 
-  function createApi (method) {
+  function createApi(method) {
     const actions = getMethod(method);
     if (actions !== null) {
       const methodName = `${actions[2] === '' ? '' : actions[2].toLowerCase()}`;
@@ -48,7 +46,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
           for (let key in controller) {
             ctx[key] = controller[key];
           }
-          
+
           let data = null;
           let result = null;
 

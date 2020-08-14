@@ -1,9 +1,9 @@
 const chalk = require('chalk');
 
-function str2path (path) {
+function str2path(path) {
   let ret = [];
   const keys = path.split('.');
-  keys.forEach(function transKey (key) {
+  keys.forEach(function transKey(key) {
     const start = key.indexOf('[');
     const end = key.indexOf(']')
     if (start > -1 && end > -1) {
@@ -19,21 +19,21 @@ function str2path (path) {
 const isTest = process.env.NODE_ENV !== 'JEST'
 
 module.exports = {
-  isPromise (obj) {
+  isPromise(obj) {
     return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
   },
-  getMethod (method) {
+  getMethod(method) {
     const re = new RegExp(/^(get|head|post|put|delete|connect|options|patch|trace)(.*)(Action$)/);
     return re[Symbol.match](method)
   },
-  _get (obj, path, def) {
+  _get(obj, path, def) {
     const basePath = str2path(path);
 
     return basePath.reduce((ret, next) => {
       return ret === undefined ? undefined : ret[next];
     }, obj) || def;
   },
-  createContext (source, req, res) {
+  createContext(source, req, res) {
     const ctx = {};
     ctx.__proto__ = source;
     ctx.req = req;
@@ -48,16 +48,16 @@ module.exports = {
 
     return ctx;
   },
-  LOG (msg, ...other) {
+  LOG(msg, ...other) {
     isTest && console.log(chalk.bgBlack('Mkbug.js [ LOG ]:'), msg, ...other);
   },
-  INFO (msg, ...other) {
+  INFO(msg, ...other) {
     isTest && console.info(chalk.yellow('Mkbug.js [ INFO]:'), chalk.yellow(msg), ...other);
   },
-  WARN (msg, ...other) {
+  WARN(msg, ...other) {
     isTest && console.warn(chalk.magenta('Mkbug.js [ WARN]:'), chalk.magenta(msg), ...other);
   },
-  ERROR (msg, ...other) {
+  ERROR(msg, ...other) {
     isTest && console.error(chalk.red('Mkbug.js [ERROR]:'), chalk.red(msg), ...other);
   }
 }

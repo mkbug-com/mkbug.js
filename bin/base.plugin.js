@@ -1,6 +1,5 @@
 const Base = require('./base');
 const { isPromise } = require('./utils');
-const MkbugError = require('./base.mkbugerror');
 
 class BasePlugin extends Base {
   constructor() {

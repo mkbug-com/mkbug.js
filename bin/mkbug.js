@@ -7,7 +7,7 @@ const BaseConfig = require('./base.config');
 const MkbugError = require('./base.mkbugerror');
 
 class Mkbug {
-  constructor (app, opts = {}) {
+  constructor(app, opts = {}) {
     LOG(`Welcome to Mkbug.js (NODE_ENV = ${process.env.NODE_ENV || ''})\n`);
 
     this.app = app;
@@ -21,7 +21,7 @@ class Mkbug {
     };;
   }
 
-  create (prefix = '') {
+  create(prefix = '') {
     let prePath = prefix;
     if (prefix === '/') {
       prePath = ''
@@ -30,16 +30,16 @@ class Mkbug {
     return this;
   }
 
-  use (...plugin) {
+  use(...plugin) {
     this.app.use(...plugin);
     return this;
   }
 
-  error (cb) {
+  error(cb) {
     this.eCb = cb;
   }
 
-  start (port, cb) {
+  start(port, cb) {
     const _this = this;
     this.app.use(function notFound(req, res, next) {
       next(new MkbugError(404, 'Request not found!'));
@@ -74,7 +74,7 @@ class Mkbug {
       }
     })
 
-    this.app.listen(port, cb || function callback (err) {
+    this.app.listen(port, cb || function callback(err) {
       if (err) {
         ERROR(`Failed with [PORT=${port}]`, err);
       } else {
