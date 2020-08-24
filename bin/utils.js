@@ -45,7 +45,9 @@ module.exports = {
     ctx.type = null;
     ctx.get = req.get.bind(req);
     ctx.set = res.set.bind(res);
-
+    ctx.ip = req.ip;
+    ctx.ips = req.ips;
+ 
     return ctx;
   },
   LOG(msg, ...other) {

@@ -1,6 +1,6 @@
 {
   "name": "mkbugjs",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "An OOP style declare Nodejs Web framework base on Express.js",
   "main": "index.js",
   "scripts": {
