@@ -9,4 +9,12 @@ module.exports = class HeaderApiTest extends BaseController {
     this.set('from-header', 'from-header')
     return ''
   }
+
+  getIpAction () {
+    return this.ip;
+  }
+
+  getIpsAction () {
+    return this.ips;
+  }
 }
