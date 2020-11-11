@@ -22,7 +22,6 @@ describe("Controller Header", () => {
       ret = err;
     } finally {
       expect(ret.status).toBe(200);
-      console.log(ret.header)
       expect(ret.header['from-header']).toBe('from-header');
     }
   });
