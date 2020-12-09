@@ -16,6 +16,7 @@ class Mkbug {
     BaseConfig.prototype.baseUrl = this.basePath;
     Object.freeze(BaseConfig.prototype);
     this.prefix = '';
+    this.__server = null;
 
     this.eCb = function (error, req, res) {
       return error;
@@ -75,7 +76,7 @@ class Mkbug {
       }
     })
 
-    this.app.listen(port, cb || function callback(err) {
+    this.__server = this.app.listen(port, cb || function callback(err) {
       if (err) {
         ERROR(`Failed with [PORT=${port}]`, err);
       } else {
@@ -83,6 +84,10 @@ class Mkbug {
       }
     });
     return this.app;
+  }
+
+  getServerInstance() {
+    return this.__server;
   }
 }
 
