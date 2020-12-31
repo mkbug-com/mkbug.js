@@ -7,10 +7,12 @@ class BaseController extends Base {
   }
 
   before (request, response) {
+    super.before(request, response)
     return true;
   }
 
   after ({ duration, status, originalUrl, request, response }) {
+    super.after({ duration, status, originalUrl, request, response })
     INFO(`${duration}ms [${status}][${request.method}]${originalUrl}`);
   }
 }
