@@ -64,3 +64,68 @@ An OOP Style Restful Api framewrok base on Express.js,and make Nodejs developmen
     }
   }
 ```
+
+## About extends
+If you want to use middleware like koa. you can use it like this.
+```js
+  // base/ControllerBaseBase.js
+  const { BaseController } = require('mkbug.js');
+
+  module.exports = class ControllerBaseBase extends BaseController {
+    before (req) {
+      console.log("ControllerBaseBase before")
+    }
+
+    after(){
+      console.log("ControllerBaseBase after")
+    }
+  }
+
+  // base/ControllerBase.js
+  const ControllerBaseBase = require('./ControllerBaseBase');
+
+  module.exports = class ControllerBase extends ControllerBaseBase {
+    before (request, response) {
+      super.before(request, response)
+      console.log("ControllerBase before")
+    }
+
+    after ({ duration, status, originalUrl, request, response }) {
+      console.log("ControllerBase after")
+      super.after({ duration, status, originalUrl, request, response })
+    }
+  }
+
+  // ExtendsTest.js
+  const ControllerBase = require('./base/ControllerBase');
+
+  module.exports = class ExtendsTest extends ControllerBase {
+    before (request, response) {
+      super.before(request, response)
+      console.log("Request start")
+    }
+
+    getAction () {
+      return "hello world"
+    }
+
+    after () {
+      console.log("Request end")
+      super.after({})
+    }
+  }
+```
+
+And then you can send curl request to /api/extendstest, you should get the log:
+```sh
+  $ curl http://localhost:3000/api/extendstest
+
+  ControllerBaseBase before
+  ControllerBase before
+  Request start
+  Request end
+  ControllerBase after
+  ControllerBaseBase after
+```
+
+It is very easy, right?
