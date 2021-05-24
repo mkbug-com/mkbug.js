@@ -6,7 +6,8 @@
   "scripts": {
     "init": "npm i express chalk jest superagent",
     "test": "(nohup node test/init.js &) && jest && curl http://localhost:3000/close",
-    "jest": "jest"
+    "jest": "jest",
+    "lint": "eslint bin --fix --ext .js"
   },
   "repository": {
     "type": "git",
@@ -39,15 +40,22 @@
   "devDependencies": {
     "chalk": "^4.1.1",
     "cookie-parser": "^1.4.5",
+    "eslint": "^7.27.0",
     "express": "^4.17.1",
-    "husky": "^6.0.0",
+    "husky": "^4.3.0",
     "jest": "^26.6.3",
+    "lint-staged": "^11.0.0",
     "superagent": "^5.3.1"
   },
   "husky": {
     "hooks": {
       "pre-commit": "echo '<type>: <subject> '",
-      "commit-msg": "HUSKY_GIT_PARAMS"
+      "commit-msg": "npm run lint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "lint-staged": {
+    "bin/*.{js}": [
+      "npm run lint"
+    ]
   }
 }
