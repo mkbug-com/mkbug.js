@@ -7,7 +7,6 @@
     "init": "npm i express chalk jest superagent",
     "test": "(nohup node test/init.js &) && jest && curl http://localhost:3000/close",
     "jest": "jest",
-    "lint": "eslint --ext .js ./bin",
     "lint:fix": "eslint --ext .js --fix ./bin"
   },
   "repository": {
@@ -57,7 +56,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "echo '<type>: <subject> '",
-      "commit-msg": "npm run lint:fix"
+      "commit-msg": "npm run lint:fix -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
