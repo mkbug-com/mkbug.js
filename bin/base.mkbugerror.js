@@ -5,7 +5,7 @@ class MkbugError extends Error {
     this.body = responseBody || 'Request not allowed!';
     this.name = 'MkbugError';
   }
-};
+}
 
 Object.freeze(MkbugError.prototype);
 
