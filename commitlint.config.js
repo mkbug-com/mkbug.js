@@ -1,10 +1,3 @@
-/*
- * @Description: description
- * @Author: caoky(caoky@dchealth.com)
- * @Date: 2020-11-05 11:12:36
- * @LastEditors: caoky(caoky@dchealth.com)
- * @LastEditTime: 2020-11-09 15:35:46
- */
 const types = [
   'build',
   'ci',
