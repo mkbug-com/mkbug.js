@@ -6,8 +6,7 @@
   "scripts": {
     "init": "npm i express chalk jest superagent",
     "test": "(nohup node test/init.js &) && jest && curl http://localhost:3000/close",
-    "jest": "jest",
-    "lint:fix": "eslint --ext .js --fix ./bin"
+    "jest": "jest"
   },
   "repository": {
     "type": "git",
@@ -34,10 +33,11 @@
   },
   "homepage": "https://github.com/mkbug-com/mkbug.js#readme",
   "peerDependencies": {
-    "express": "^4.1.1",
-    "chalk": "^4.0.0"
+    "chalk": "^4.0.0",
+    "express": "^4.1.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
     "chalk": "^4.1.1",
     "cookie-parser": "^1.4.5",
     "eslint": "^6.7.2",
@@ -48,20 +48,21 @@
     "eslint-plugin-sonarjs": "^0.5.0",
     "eslint-plugin-standard": "^4.0.0",
     "express": "^4.17.1",
-    "husky": "^4.3.0",
+    "husky": "^4.3.8",
     "jest": "^26.6.3",
     "lint-staged": "^11.0.0",
     "superagent": "^5.3.1"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo '<type>: <subject> '",
-      "commit-msg": "npm run lint:fix -E HUSKY_GIT_PARAMS"
+      "pre-commit": "echo '<type>: <subject>'",
+      "commit-msg": "lint-staged"
     }
   },
   "lint-staged": {
-    "./bin/*.{js}": [
-      "npm run lint:fix"
+    "bin/*.{js}": [
+      "prettier --write",
+      "eslint --cache --fix"
     ]
   }
 }
