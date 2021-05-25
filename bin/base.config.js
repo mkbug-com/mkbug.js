@@ -3,7 +3,7 @@ const fs = require('fs');
 const { ERROR } = require('./utils');
 
 class BaseConfig {
-  constructor (name = 'config', path = '', opts = { 
+  constructor (name = 'config', path = '', opts = {
     encoding: 'utf8'
   }) {
     this.name = name;
@@ -19,7 +19,7 @@ class BaseConfig {
 
 BaseConfig.prototype.__$$parseConfig = function (opts) {
   const base = path.resolve(this.baseUrl || 'src', 'config');
-  
+
   try {
     const baseConfig = `${base}/${this.name}.conf`;
     const config = `${base}/${this.name}.${this.mode}.conf`;
