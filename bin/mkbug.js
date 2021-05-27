@@ -20,7 +20,7 @@ class Mkbug {
 
     this.eCb = function (error, req, res) {
       return error;
-    };;
+    };
   }
 
   create(prefix = '') {

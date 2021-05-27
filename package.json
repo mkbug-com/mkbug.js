@@ -33,14 +33,37 @@
   },
   "homepage": "https://github.com/mkbug-com/mkbug.js#readme",
   "peerDependencies": {
-    "express": "^4.1.1",
-    "chalk": "^4.0.0"
+    "chalk": "^4.0.0",
+    "express": "^4.1.1"
   },
   "devDependencies": {
-    "chalk": "^4.1.0",
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^12.1.4",
+    "chalk": "^4.1.1",
     "cookie-parser": "^1.4.5",
+    "eslint": "^6.7.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-sonarjs": "^0.5.0",
+    "eslint-plugin-standard": "^4.0.0",
     "express": "^4.17.1",
-    "jest": "^26.1.0",
-    "superagent": "^5.2.2"
+    "husky": "^6.0.0",
+    "jest": "^26.6.3",
+    "lint-staged": "^11.0.0",
+    "superagent": "^5.3.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "bin/*.{js}": [
+      "prettier --write",
+      "eslint --cache --fix"
+    ]
   }
 }

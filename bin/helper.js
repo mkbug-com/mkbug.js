@@ -104,7 +104,7 @@ function parsePlugin(dir, parent = '') {
     const stat = fs.lstatSync(`${dir}/${file}`);
     if (stat.isFile()) {
       const Plugin = require(`${dir}/${file}`);
-      if (typeof Plugin === 'function' && Plugin.constructor) {        
+      if (typeof Plugin === 'function' && Plugin.constructor) {
         const plugin = new Plugin();
 
         const className = plugin.__$$getName();
@@ -124,7 +124,7 @@ function parsePlugin(dir, parent = '') {
         WARN(`${file} will be ignored!`);
       }
     } else if (stat.isDirectory()) {
-      const subObj = parsePlugin(path.resolve(dir, file), `${parent !== '' ? (parent + '.' + file) : file}`) || {};
+      const subObj = parsePlugin(path.resolve(dir, file), `${parent !== '' ? parent + '.' + file : file}`) || {};
       plugins.push(...subObj);
     }
   });
