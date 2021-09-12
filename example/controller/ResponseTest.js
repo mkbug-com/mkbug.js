@@ -3,23 +3,23 @@ const path = require('path');
 const { BaseController } = require('../../index');
 
 module.exports = class ResponseTest extends BaseController {
-  getStringAction () {
+  getStringAction() {
     return 'ok';
   }
 
-  getNumberAction () {
+  getNumberAction() {
     return 10086;
   }
 
-  getJSONAction () {
+  getJSONAction() {
     return { msg: 'ok' };
   }
 
-  getBufferAction () {
-    return fs.readFileSync(path.resolve(process.cwd(), 'example','data', 'test'));
+  getBufferAction() {
+    return fs.readFileSync(path.resolve(process.cwd(), 'example', 'data', 'test'));
   }
 
-  getStreamAction () {
-    return fs.createReadStream(path.resolve(process.cwd(), 'example','data', 'test'));
+  getStreamAction() {
+    return fs.createReadStream(path.resolve(process.cwd(), 'example', 'data', 'test'));
   }
-}
+};

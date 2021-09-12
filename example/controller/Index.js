@@ -1,39 +1,39 @@
 const { BaseController } = require('../../index');
 
 module.exports = class Index extends BaseController {
-  getTestAction () {
+  getTestAction() {
     return 'getTestAction';
   }
 
-  headTestAction () {
+  headTestAction() {
     return 'headTestAction';
   }
 
-  postTestAction () {
+  postTestAction() {
     return 'postTestAction';
   }
 
-  putTestAction () {
+  putTestAction() {
     return 'putTestAction';
   }
 
-  deleteTestAction () {
+  deleteTestAction() {
     return 'deleteTestAction';
   }
 
-  connectTestAction () {
+  connectTestAction() {
     return 'connectTestAction';
   }
 
-  optionsTestAction () {
+  optionsTestAction() {
     return 'optionsTestAction';
   }
 
-  patchTestAction () {
+  patchTestAction() {
     return 'patchTestAction';
   }
 
-  traceTestAction () {
+  traceTestAction() {
     return 'traceTestAction';
   }
-}
+};

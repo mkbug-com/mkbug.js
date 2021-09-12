@@ -1,7 +1,7 @@
 const { BaseController } = require('../../index');
 
 module.exports = class PluginTest extends BaseController {
-  getAction () {
+  getAction() {
     return 'ok';
   }
-}
+};

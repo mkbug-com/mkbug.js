@@ -1,20 +1,20 @@
 const { BaseController } = require('../../index');
 
 module.exports = class HeaderApiTest extends BaseController {
-  getAction () {
+  getAction() {
     return this.get('from-header');
   }
 
-  getHeaderAction () {
-    this.set('from-header', 'from-header')
-    return ''
+  getHeaderAction() {
+    this.set('from-header', 'from-header');
+    return '';
   }
 
-  getIpAction () {
+  getIpAction() {
     return this.ip;
   }
 
-  getIpsAction () {
+  getIpsAction() {
     return this.ips;
   }
-}
+};

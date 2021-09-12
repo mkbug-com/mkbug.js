@@ -1,10 +1,10 @@
 const request = require('superagent');
 
-describe("Controller Response测试", () => {
-  it("Response String", async () => {
+describe('Controller Response测试', () => {
+  it('Response String', async () => {
     let ret = null;
     try {
-      ret = await request.get('http://localhost:3000/api/responsetest/string')
+      ret = await request.get('http://localhost:3000/api/responsetest/string');
     } catch (err) {
       ret = err;
     } finally {
@@ -13,10 +13,10 @@ describe("Controller Response测试", () => {
     }
   });
 
-  it("Response Number", async () => {
+  it('Response Number', async () => {
     let ret = null;
     try {
-      ret = await request.get('http://localhost:3000/api/responsetest/number')
+      ret = await request.get('http://localhost:3000/api/responsetest/number');
     } catch (err) {
       ret = err;
     } finally {
@@ -25,10 +25,10 @@ describe("Controller Response测试", () => {
     }
   });
 
-  it("Response JSON", async () => {
+  it('Response JSON', async () => {
     let ret = null;
     try {
-      ret = await request.get('http://localhost:3000/api/responsetest/json')
+      ret = await request.get('http://localhost:3000/api/responsetest/json');
     } catch (err) {
       ret = err;
     } finally {
@@ -37,10 +37,10 @@ describe("Controller Response测试", () => {
     }
   });
 
-  it("Response Buffer", async () => {
+  it('Response Buffer', async () => {
     let ret = null;
     try {
-      ret = await request.get('http://localhost:3000/api/responsetest/buffer')
+      ret = await request.get('http://localhost:3000/api/responsetest/buffer');
     } catch (err) {
       ret = err;
     } finally {
@@ -49,10 +49,10 @@ describe("Controller Response测试", () => {
     }
   });
 
-  it("Response Stream", async () => {
+  it('Response Stream', async () => {
     let ret = null;
     try {
-      ret = await request.get('http://localhost:3000/api/responsetest/stream')
+      ret = await request.get('http://localhost:3000/api/responsetest/stream');
     } catch (err) {
       ret = err;
     } finally {
@@ -60,4 +60,4 @@ describe("Controller Response测试", () => {
       expect(ret.text).toEqual('10086');
     }
   });
-})
+});

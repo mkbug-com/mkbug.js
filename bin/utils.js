@@ -1,22 +1,22 @@
 const chalk = require('chalk');
 
 function str2path(path) {
-  let ret = [];
+  const ret = [];
   const keys = path.split('.');
   keys.forEach(function transKey(key) {
     const start = key.indexOf('[');
-    const end = key.indexOf(']')
+    const end = key.indexOf(']');
     if (start > -1 && end > -1) {
       ret.push(key.substring(0, start));
       ret.push(key.substring(start + 1, end));
     } else {
       ret.push(key);
     }
-  })
+  });
   return ret;
 }
 
-const isTest = process.env.NODE_ENV !== 'JEST'
+const isTest = process.env.NODE_ENV !== 'JEST';
 
 module.exports = {
   isPromise(obj) {
@@ -24,14 +24,16 @@ module.exports = {
   },
   getMethod(method) {
     const re = new RegExp(/^(get|head|post|put|delete|connect|options|patch|trace)(.*)(Action$)/);
-    return re[Symbol.match](method)
+    return re[Symbol.match](method);
   },
   _get(obj, path, def) {
     const basePath = str2path(path);
 
-    return basePath.reduce((ret, next) => {
-      return ret === undefined ? undefined : ret[next];
-    }, obj) || def;
+    return (
+      basePath.reduce((ret, next) => {
+        return ret === undefined ? undefined : ret[next];
+      }, obj) || def
+    );
   },
   createContext(source, req, res) {
     const ctx = {};
@@ -62,4 +64,4 @@ module.exports = {
   ERROR(msg, ...other) {
     isTest && console.error(chalk.red('Mkbug.js [ERROR]:'), chalk.red(msg), ...other);
   }
-}
+};

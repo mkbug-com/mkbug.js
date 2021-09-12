@@ -1,3 +1,3 @@
 exports.module = {
-  test: "1212",
-}
+  test: '1212'
+};

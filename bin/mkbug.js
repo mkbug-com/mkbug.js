@@ -12,13 +12,13 @@ class Mkbug {
     LOG(`         ╭∩╮(︶︿︶)╭∩╮\n`);
 
     this.app = app;
-    this.basePath = opts.path && path.resolve(process.cwd(), opts.path) || path.resolve(process.cwd(), 'src');
+    this.basePath = (opts.path && path.resolve(process.cwd(), opts.path)) || path.resolve(process.cwd(), 'src');
     BaseConfig.prototype.baseUrl = this.basePath;
     Object.freeze(BaseConfig.prototype);
     this.prefix = '';
     this.__server = null;
 
-    this.eCb = function (error, req, res) {
+    this.eCb = function (error) {
       return error;
     };
   }
@@ -26,7 +26,7 @@ class Mkbug {
   create(prefix = '') {
     let prePath = prefix;
     if (prefix === '/') {
-      prePath = ''
+      prePath = '';
     }
     this.app.use(prePath, createModule(this.basePath, prePath));
     return this;
@@ -47,7 +47,7 @@ class Mkbug {
       next(new MkbugError(404, 'Request not found!'));
     });
 
-    this.app.use(function exception(error, req, res, next) {
+    this.app.use(function exception(error, req, res) {
       const ret = _this.eCb(error);
       let result = null;
       let status = 500;
@@ -60,7 +60,7 @@ class Mkbug {
           result = {
             name: 'Mkbug Error',
             msg: `Reject by ${ret.name}!`
-          }
+          };
         } else {
           result = 'Mkbug Error';
         }
@@ -74,15 +74,19 @@ class Mkbug {
           res.json(result);
         }
       }
-    })
-
-    this.__server = this.app.listen(port, cb || function callback(err) {
-      if (err) {
-        ERROR(`Failed with [PORT=${port}]`, err);
-      } else {
-        INFO(`Start with [PORT=${port}]`);
-      }
     });
+
+    this.__server = this.app.listen(
+      port,
+      cb ||
+        function callback(err) {
+          if (err) {
+            ERROR(`Failed with [PORT=${port}]`, err);
+          } else {
+            INFO(`Start with [PORT=${port}]`);
+          }
+        }
+    );
     return this.app;
   }
 

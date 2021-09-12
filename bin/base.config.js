@@ -3,9 +3,13 @@ const fs = require('fs');
 const { ERROR } = require('./utils');
 
 class BaseConfig {
-  constructor (name = 'config', path = '', opts = {
-    encoding: 'utf8'
-  }) {
+  constructor(
+    name = 'config',
+    path = '',
+    opts = {
+      encoding: 'utf8'
+    }
+  ) {
     this.name = name;
     this.mode = process.env.NODE_ENV || '';
     this.values = {};
@@ -35,19 +39,19 @@ BaseConfig.prototype.__$$parseConfig = function (opts) {
   }
 
   return this.values;
-}
+};
 
 BaseConfig.prototype.__$$parseFile = function (str = '') {
-  let tmpStr = str.replace('\r\n', '\n');
+  const tmpStr = str.replace('\r\n', '\n');
   const lineArr = tmpStr.split('\n');
   const _this = this;
-  function transFunc (line) {
+  function transFunc(line) {
     const keyValue = line.split('=');
     if (keyValue[1] && keyValue[1] !== '') {
       _this.values[keyValue[0]] = keyValue[1];
     }
   }
   lineArr.forEach(transFunc);
-}
+};
 
 module.exports = BaseConfig;

@@ -3,7 +3,7 @@ module.exports = class Base {
     this.__$$name = this.constructor.name;
   }
 
-  __$$getName () {
+  __$$getName() {
     return this.__$$name;
   }
-}
+};

@@ -1,10 +1,10 @@
 const request = require('superagent');
 
-describe("Plugin", () => {
-  it("Plugin生效判断 通过", async () => {
+describe('Plugin', () => {
+  it('Plugin生效判断 通过', async () => {
     let ret = null;
     try {
-      ret = await request.get('http://localhost:3000/api/plugintest')
+      ret = await request.get('http://localhost:3000/api/plugintest');
     } catch (err) {
       ret = err;
     } finally {
@@ -13,10 +13,10 @@ describe("Plugin", () => {
     }
   });
 
-  it("Plugin生效判断 阻断String类型", async () => {
+  it('Plugin生效判断 阻断String类型', async () => {
     let ret = null;
     try {
-      ret = await request.get('http://localhost:3000/api/plugintest?type=plugin2')
+      ret = await request.get('http://localhost:3000/api/plugintest?type=plugin2');
     } catch (err) {
       ret = err;
     } finally {
@@ -25,10 +25,10 @@ describe("Plugin", () => {
     }
   });
 
-  it("Plugin生效判断 阻断Json类型", async () => {
+  it('Plugin生效判断 阻断Json类型', async () => {
     let ret = null;
     try {
-      ret = await request.get('http://localhost:3000/api/plugintest?type=plugin3')
+      ret = await request.get('http://localhost:3000/api/plugintest?type=plugin3');
     } catch (err) {
       ret = err;
     } finally {

@@ -6,14 +6,12 @@ class BasePlugin extends Base {
     super();
   }
 
-  exec (req, res) {
-
-  }
+  exec() {}
 }
 
 BasePlugin.prototype.run = async function (req, res, next) {
   try {
-    const result = this.exec(req, res)
+    const result = this.exec(req, res);
     if (isPromise(result)) {
       await result;
     }

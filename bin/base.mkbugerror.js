@@ -1,6 +1,6 @@
 class MkbugError extends Error {
   constructor(status, responseBody) {
-    super()
+    super();
     this.status = status || 405;
     this.body = responseBody || 'Request not allowed!';
     this.name = 'MkbugError';

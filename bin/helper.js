@@ -1,23 +1,16 @@
-const express = require("express");
+const express = require('express');
 const path = require('path');
 const fs = require('fs');
 
 const BaseController = require('./base.controller');
 const BasePlugin = require('./base.plugin');
 
-const {
-  createContext,
-  INFO,
-  WARN,
-  ERROR
-} = require('./utils');
+const { createContext, INFO, WARN, ERROR } = require('./utils');
 
 let baseDir = '';
 
 function doParse(modules, prefix) {
-  const {
-    Controller = 'controller'
-  } = modules;
+  const { Controller = 'controller' } = modules;
 
   const router = express.Router();
 
@@ -27,11 +20,11 @@ function doParse(modules, prefix) {
     return (res, req, next) => {
       const ctx = createContext(plugin, res, req);
       plugin.run.call(ctx, res, req, next);
-    }
-  }
+    };
+  };
   plugins.forEach((plugin) => {
-    router.use(createplugin(plugin))
-  })
+    router.use(createplugin(plugin));
+  });
   INFO('==========Mkbug plugins inject end=============\n');
 
   INFO('==========Mkbug controller mapping start==========');
@@ -85,15 +78,18 @@ function parseController(router, dir, { pre = '/', prefix }) {
       }
     } else if (stat.isDirectory()) {
       if (!file.startsWith('_')) {
-        subPath += `${file}/`
+        subPath += `${file}/`;
       }
-      parseController(router, path.resolve(dir, file), { pre: subPath, prefix });
+      parseController(router, path.resolve(dir, file), {
+        pre: subPath,
+        prefix
+      });
     }
   });
 }
 
 function parsePlugin(dir, parent = '') {
-  let plugins = [];
+  const plugins = [];
 
   if (!fs.existsSync(dir)) {
     return plugins;
@@ -155,4 +151,4 @@ exports.createModule = function (path, prefix) {
   }
 
   return router;
-}
+};

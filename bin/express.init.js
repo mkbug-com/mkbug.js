@@ -2,13 +2,7 @@ const express = require('express');
 const Stream = require('stream');
 
 const { METHODS } = require('./const');
-const {
-  isPromise,
-  getMethod,
-  createContext,
-  INFO,
-  WARN
-} = require('./utils');
+const { isPromise, getMethod, createContext, INFO, WARN } = require('./utils');
 const router = express.Router();
 
 router.__proto__.attch = function (pre, controller, needParams, prefix) {
@@ -40,10 +34,10 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
               originalUrl: ctx.req.originalUrl,
               request: ctx.req,
               response: ctx.res
-            })
-          })
+            });
+          });
 
-          for (let key in controller) {
+          for (const key in controller) {
             ctx[key] = controller[key];
           }
 
@@ -57,7 +51,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
             if (isPromise(data)) {
               result = await data;
             } else {
-              result = data
+              result = data;
             }
 
             if (!res.finished) {
@@ -74,7 +68,7 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
           } catch (e) {
             next(e);
           }
-        })
+        });
       }
     } else {
       WARN(`${method} in Controller ${name} is not right HTTP Method.\n`);
@@ -82,4 +76,4 @@ router.__proto__.attch = function (pre, controller, needParams, prefix) {
   }
 
   methods.forEach(createApi);
-}
+};

@@ -1,7 +1,7 @@
 const { BaseController } = require('../../../../../../index');
 
 module.exports = class Case2 extends BaseController {
-  getAction () {
+  getAction() {
     return this.params;
   }
-}
+};

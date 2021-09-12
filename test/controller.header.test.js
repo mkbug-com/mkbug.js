@@ -1,11 +1,10 @@
 const request = require('superagent');
 
-describe("Controller Header", () => {
-  it("Header from client", async () => {
+describe('Controller Header', () => {
+  it('Header from client', async () => {
     let ret = null;
     try {
-      ret = await request.get('http://localhost:3000/api/headerapitest')
-      .set('from-header', 'from-header')
+      ret = await request.get('http://localhost:3000/api/headerapitest').set('from-header', 'from-header');
     } catch (err) {
       ret = err;
     } finally {
@@ -14,10 +13,10 @@ describe("Controller Header", () => {
     }
   });
 
-  it("Header from server", async () => {
+  it('Header from server', async () => {
     let ret = null;
     try {
-      ret = await request.get('http://localhost:3000/api/headerapitest/header')
+      ret = await request.get('http://localhost:3000/api/headerapitest/header');
     } catch (err) {
       ret = err;
     } finally {
@@ -26,10 +25,10 @@ describe("Controller Header", () => {
     }
   });
 
-  it("Ip test", async () => {
+  it('Ip test', async () => {
     let ret = null;
     try {
-      ret = await request.get('http://localhost:3000/api/headerapitest/ip')
+      ret = await request.get('http://localhost:3000/api/headerapitest/ip');
     } catch (err) {
       ret = err;
     } finally {
@@ -38,10 +37,10 @@ describe("Controller Header", () => {
     }
   });
 
-  it("Ip test", async () => {
+  it('Ip test', async () => {
     let ret = null;
     try {
-      ret = await request.get('http://localhost:3000/api/headerapitest/ips')
+      ret = await request.get('http://localhost:3000/api/headerapitest/ips');
     } catch (err) {
       ret = err;
     } finally {
@@ -49,4 +48,4 @@ describe("Controller Header", () => {
       expect(ret.text).toBe('[]');
     }
   });
-})
+});
