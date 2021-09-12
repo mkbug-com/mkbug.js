@@ -1,0 +1,21 @@
+# .prettierignore
+package.json
+node_modules
+.husky
+*.min.js
+element3
+
+# OS
+.DS_Store
+.idea
+.npmrc
+yarn.lock
+
+# Ignored suffix
+*.log
+*.md
+*.svg
+*.png
+*ignore
+## Built-files
+.cache

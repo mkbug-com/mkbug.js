@@ -1,0 +1,4 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+#--no-install 参数表示强制npx使用项目中node_modules目录中的lint-staged包
+npx --no-install lint-staged
